@@ -1,0 +1,40 @@
+[alias]
+	a = add
+	aa = add --all :/
+	alias = config --get-regexp ^alias\\.
+	b = branch
+	ci = commit
+	co = checkout
+	d = diff --ignore-space-change
+	l = log --pretty=format:\"%C(green)%h%C(reset) %C(blue)%ad%C(reset) %s%C(yellow)%d%C(reset) %C(blue)[%an]%C(reset)\" --graph --date=short
+	s = status
+	r = remote
+
+	l = log --graph --pretty=format:'%C(yellow)%h%C(cyan)%d%Creset %s %C(white)- %an, %ar%Creset'
+	ls = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
+	ll = log --stat --abbrev-commit
+
+	lasttag = describe --tags --abbrev=0
+	lt = describe --tags --abbrev=0
+	taglist = log --tags --decorate=full --simplify-by-decoration --no-walk --pretty='%C(yellow)%h%Cred%d%n%Cgreen%cr%Creset %cn%n'
+	tl = log --tags --decorate=full --simplify-by-decoration --no-walk --pretty='%C(yellow)%h%Cred%d%n%Cgreen%cr%Creset %cn%n'
+
+	pusht = push --tags
+	pushu = "!git push --set-upstream origin `git symbolic-ref --short HEAD`"
+
+	sanitize = "!git remote prune origin; git branch --merged master | grep -v 'master\\|production' | xargs -n 1 git branch -d"
+	sanitize-remote = "!git remote prune origin; git branch -r --merged master | grep -v 'master\\|production' | sed 's/origin\\//:/' | xargs -n 1 git push origin; git remote prune origin"
+	sanitize-noop = "!git remote prune -n origin; git branch --merged master | grep -v 'master\\|production' | sed 's/^/- [would delete]/'"
+	sanitize-remote-noop = "!git remote prune -n origin; git branch -r --merged master | grep -v 'master\\|production' | sed 's/^ /- [would delete]/'"
+
+	foreach = "!git $* && git submodule foreach git "
+[color]
+	ui = true
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
+[push]
+	default = simple
+[user]
+	name = Mike Boan
+	email = mikeboan@gmail.com
