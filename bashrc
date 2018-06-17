@@ -9,15 +9,41 @@ source "$HOME/.git-prompt.sh"
 
 # look for commands in these places
 export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+export SCALA_HOME=/usr/local/share/scala
+export PATH=$PATH:$SCALA_HOME/bin
 
 # make vim the default text editor
 export EDITOR="vim"
 
 # shortened prompt that includes git branch info
-RED='\[\e[0;31m\]'
+
+
+random_color () {
+  echo $(($RANDOM % 6 + 1 + 30))
+}
+
+random_background () {
+  echo $(($RANDOM % 6 + 1 + 40))
+}
+
+
+RED='\[\e[1;31m\]'
+GREEN='\[\e[1;32m\]'
+TEAL='\[\e[1;36m\]'
 WHITE='\[\e[1;37m\]'
 RESET='\[\e[0m\]'
-export PS1="$RED\W$WHITE\$(__git_ps1)$RED\$$RESET "
+
+
+smiley () {
+  if [ $? = 0 ]; then
+     echo -e ":)"
+  else
+     echo -e ":("
+  fi
+
+}
+export PS1="\n\[\e[1;\$(random_background)m\]\w$RESET$WHITE\$(__git_ps1) $WHITE\$(smiley)$WHITE \n> $RESET"
+
 
 ### other ###
 
