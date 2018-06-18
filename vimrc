@@ -11,6 +11,7 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'joshdick/onedark.vim'
 Plugin 'leafgarland/typescript-vim'
 Plugin 'itchyny/lightline.vim'
+Plugin 'Valloric/YouCompleteMe'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
@@ -71,4 +72,7 @@ let g:lightline = {
   \ }
 
 " personal settings
-set number relativenumber
+set number relativenumber " absolute and relative line numbers
+set exrc " use local .vimrc
+set secure " make local .vimrc secure
+

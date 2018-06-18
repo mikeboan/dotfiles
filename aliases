@@ -6,6 +6,7 @@ alias irb="pry"
 alias be="bundle exec"
 alias diff="git diff --no-index"
 alias projects="cd ~/Projects"
+alias karen="charon"
 
 # make `g` behave like `git status` with no args, or `git` with args
 g () {
