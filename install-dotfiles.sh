@@ -8,7 +8,7 @@
 
 dir=~/dotfiles                    # dotfiles directory
 olddir=~/dotfiles_old             # old dotfiles backup directory
-files="aliases bash_profile bashrc gemrc gitconfig git-completion.bash git-prompt.sh gitignore ideavimrc npmrc pryrc railsrc rspec rubocop.yml sqliterc vim vimrc"    # list of files/folders to symlink in homedir
+files="aliases bash_profile bashrc gemrc gitconfig git-completion.bash git-prompt.sh gitignore ideavimrc npmrc pryrc railsrc rspec rubocop.yml sqliterc vim vimrc zshrc"    # list of files/folders to symlink in homedir
 
 ##########
 
