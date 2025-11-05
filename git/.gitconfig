@@ -1,0 +1,36 @@
+[user]
+	name = Mike Boan
+	email = mikeboan@gmail.com
+
+[core]
+	editor = nvim
+	# Use a global gitignore file
+	excludesfile = ~/.gitignore-global
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[push]
+	default = current
+	autoSetupRemote = true
+
+[alias]
+	# Common shortcuts
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	visual = log --graph --oneline --decorate --all
+
+[color]
+	ui = auto
+
+# Include local config (for work-specific settings, tokens, etc.)
+# This file is gitignored and should contain machine-specific or secret config
+[include]
+	path = ~/.gitconfig.local

@@ -1,0 +1,15 @@
+{
+  "runtime": {
+    "version": "LuaJIT"
+  },
+  "diagnostics": {
+    "globals": ["vim", "require"]
+  },
+  "workspace": {
+    "checkThirdParty": false,
+    "library": ["/usr/share/nvim/runtime", "${3rd}/luv/library"]
+  },
+  "telemetry": {
+    "enable": false
+  }
+}

@@ -1,0 +1,28 @@
+# .zshrc.local.example
+# Copy this to ~/.zshrc.local and customize for work/machine-specific settings
+# ~/.zshrc.local is gitignored and won't be committed
+
+# --- WORK-SPECIFIC CONFIG --- #
+
+# Example: Work-specific environment variables
+# export WORK_API_KEY="your-secret-key"
+# export COMPANY_TOOLS_PATH="/path/to/company/tools"
+
+# Example: Work-specific aliases
+# alias deploy-staging='./scripts/deploy.sh staging'
+# alias connect-vpn='sudo openvpn --config ~/work/vpn.ovpn'
+
+# Example: Project-specific shortcuts (like your BEAMJOBS utils)
+# export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+# alias startClientTunnel='ngrok http 8888 --subdomain company-client-mike'
+# alias startServerTunnel='ngrok http 8080 --subdomain company-server-mike'
+
+# --- MACHINE-SPECIFIC CONFIG --- #
+
+# Example: Different paths or settings per machine
+# if [[ $(hostname) == "work-laptop" ]]; then
+#   export PROJECT_DIR="$HOME/work/projects"
+# else
+#   export PROJECT_DIR="$HOME/personal/projects"
+# fi
