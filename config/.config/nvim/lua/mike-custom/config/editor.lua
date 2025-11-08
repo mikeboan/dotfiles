@@ -201,4 +201,75 @@ return {
 			})
 		end,
 	},
+
+	-- Multiple cursors (like Ctrl+D in VSCode/IntelliJ)
+	-- Primary: vim-visual-multi
+	{
+		"mg979/vim-visual-multi",
+		enabled = true,
+		branch = "master",
+		keys = {
+			{ "<C-n>", mode = { "n", "x" }, desc = "Select next occurrence" },
+			{ "<C-p>", mode = { "n", "x" }, desc = "Unselect previous occurrence" },
+			{ "<C-S-n>", mode = { "n", "x" }, desc = "Select all occurrences" },
+		},
+		config = function()
+			-- Configure vim-visual-multi to match ideavimrc behavior
+			vim.g.VM_maps = {
+				["Find Under"] = "<C-n>", -- Select next occurrence
+				["Find Subword Under"] = "<C-n>",
+				["Skip Region"] = "<C-p>", -- Skip current, select next
+				["Remove Region"] = "<C-p>", -- Unselect current
+				["Select All"] = "<C-S-n>", -- Select all occurrences
+				["Start Regex Search"] = "\\/",
+				["Add Cursor Down"] = "<C-Down>",
+				["Add Cursor Up"] = "<C-Up>",
+				["Visual Cursors"] = "<C-S-l>",
+			}
+			-- Don't show mappings on startup
+			vim.g.VM_show_warnings = 0
+		end,
+	},
+
+	-- Alternative: nvim-multi-cursor (disabled by default for testing)
+	{
+		"jake-stewart/multicursor.nvim",
+		enabled = false, -- Set to true to test this instead of vim-visual-multi
+		branch = "1.0",
+		config = function()
+			local mc = require("multicursor-nvim")
+
+			mc.setup()
+
+			-- Match ideavimrc keybindings
+			vim.keymap.set({ "n", "v" }, "<C-n>", function()
+				mc.matchAddCursor(1)
+			end, { desc = "Add cursor and jump to next match" })
+
+			vim.keymap.set({ "n", "v" }, "<C-p>", function()
+				mc.matchSkipCursor(1)
+			end, { desc = "Skip current and add cursor to next match" })
+
+			vim.keymap.set({ "n", "v" }, "<C-S-n>", function()
+				mc.matchAllAddCursors()
+			end, { desc = "Add cursor to all matches" })
+
+			-- Clear cursors with Esc
+			vim.keymap.set({ "n", "v" }, "<Esc>", function()
+				if not mc.cursorsEnabled() then
+					mc.enableCursors()
+				elseif mc.hasCursors() then
+					mc.clearCursors()
+				else
+					-- Default <esc> handler
+				end
+			end)
+
+			-- Customize how it looks
+			vim.api.nvim_set_hl(0, "MultiCursorCursor", { link = "Cursor" })
+			vim.api.nvim_set_hl(0, "MultiCursorVisual", { link = "Visual" })
+			vim.api.nvim_set_hl(0, "MultiCursorDisabledCursor", { link = "Visual" })
+			vim.api.nvim_set_hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
+		end,
+	},
 }

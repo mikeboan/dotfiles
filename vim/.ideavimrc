@@ -154,8 +154,8 @@ nmap <leader>q <Action>(CloseContent)
 " ========================================
 
 let g:WhichKeyDesc_explorer = "<leader>e Explorer"
-nmap <leader>ee :NERDTreeToggle<CR>
-let g:WhichKeyDesc_explorer_toggle = "<leader>ee Toggle explorer"
+nmap <leader>e :NERDTreeToggle<CR>
+let g:WhichKeyDesc_explorer_toggle = "<leader>e Toggle explorer"
 nmap <leader>ef :NERDTreeFind<CR>
 let g:WhichKeyDesc_explorer_find = "<leader>ef Find in explorer"
 nmap <leader>ep <Action>(ActivateProjectToolWindow)
@@ -207,10 +207,6 @@ nmap go <Action>(GotoRelated)
 " Navigate back/forward in history
 nmap gb <Action>(Back)
 nmap gf <Action>(Forward)
-nmap <leader>gf <Action>(Back)
-let g:WhichKeyDesc_goto_back = "<leader>gf Back in history"
-nmap <leader>gF <Action>(Forward)
-let g:WhichKeyDesc_goto_forward = "<leader>gF Forward in history"
 
 " ========================================
 " Terminal
@@ -248,24 +244,22 @@ nmap <leader>od <Action>(ActivateDebugToolWindow)
 let g:WhichKeyDesc_open_debug = "<leader>od Open debug window"
 
 " ========================================
-" Testing
+" Testing (Simplified to match nvim)
 " ========================================
 
 let g:WhichKeyDesc_test = "<leader>t Test"
-nmap <leader>tt <Action>(RunClass)
-let g:WhichKeyDesc_test_run = "<leader>tt Run test class"
-nmap <leader>tc <Action>(RunContext)
-let g:WhichKeyDesc_test_context = "<leader>tc Run test at cursor"
-nmap <leader>tf <Action>(RerunFailedTests)
-let g:WhichKeyDesc_test_failed = "<leader>tf Rerun failed tests"
-nmap <leader>tl <Action>(Rerun)
-let g:WhichKeyDesc_test_last = "<leader>tl Rerun last"
-nmap <leader>td <Action>(DebugClass)
-let g:WhichKeyDesc_test_debug = "<leader>td Debug test"
+nmap <leader>t <Action>(RunContext)
+let g:WhichKeyDesc_test_nearest = "<leader>t Run nearest test"
+nmap <leader>T <Action>(RunClass)
+let g:WhichKeyDesc_test_file = "<leader>T Run test file"
+nmap <leader>a <Action>(RunAllTests)
+let g:WhichKeyDesc_test_all = "<leader>a Run all tests"
+nmap <leader>l <Action>(Rerun)
+let g:WhichKeyDesc_test_last = "<leader>l Rerun last"
+nmap <leader>tv <Action>(GotoTest)
+let g:WhichKeyDesc_test_visit = "<leader>tv Visit test file"
 nmap <leader>tb <Action>(ToggleLineBreakpoint)
 let g:WhichKeyDesc_test_breakpoint = "<leader>tb Toggle breakpoint"
-nmap <leader>ta <Action>(RunAllTests)
-let g:WhichKeyDesc_test_all = "<leader>ta Run all tests"
 
 " ========================================
 " Run Configurations
@@ -383,29 +377,29 @@ nmap <leader>qe <Action>(ShowErrorDescription)
 " Git/VCS Integration
 " ========================================
 
-let g:WhichKeyDesc_git = "<leader>G Git"
-nmap <leader>Gs <Action>(Vcs.Show.Local.Changes)
-let g:WhichKeyDesc_git_status = "<leader>Gs Status"
-nmap <leader>Gc <Action>(CheckinProject)
-let g:WhichKeyDesc_git_commit = "<leader>Gc Commit"
-nmap <leader>Gp <Action>(Vcs.Push)
-let g:WhichKeyDesc_git_push = "<leader>Gp Push"
-nmap <leader>Gu <Action>(Vcs.UpdateProject)
-let g:WhichKeyDesc_git_update = "<leader>Gu Update/Pull"
-nmap <leader>Gb <Action>(Git.Branches)
-let g:WhichKeyDesc_git_branches = "<leader>Gb Branches"
-nmap <leader>Gf <Action>(Git.Fetch)
-let g:WhichKeyDesc_git_fetch = "<leader>Gf Fetch"
-nmap <leader>Gr <Action>(Vcs.RollbackChangedLines)
-let g:WhichKeyDesc_git_revert = "<leader>Gr Revert lines"
-nmap <leader>Gh <Action>(Vcs.ShowTabbedFileHistory)
-let g:WhichKeyDesc_git_history = "<leader>Gh History"
-nmap <leader>Ga <Action>(Annotate)
-let g:WhichKeyDesc_git_annotate = "<leader>Ga Annotate/Blame"
-nmap <leader>Gd <Action>(Compare.SameVersion)
-let g:WhichKeyDesc_git_diff = "<leader>Gd Diff"
-nmap <leader>Gt <Action>(ActivateVersionControlToolWindow)
-let g:WhichKeyDesc_git_tool = "<leader>Gt Git tool window"
+let g:WhichKeyDesc_git = "<leader>g Git"
+nmap <leader>gg <Action>(CheckinProject)
+let g:WhichKeyDesc_git_commit = "<leader>gg Commit/Lazygit"
+nmap <leader>gs <Action>(Vcs.Show.Local.Changes)
+let g:WhichKeyDesc_git_status = "<leader>gs Status"
+nmap <leader>gp <Action>(Vcs.Push)
+let g:WhichKeyDesc_git_push = "<leader>gp Push"
+nmap <leader>gu <Action>(Vcs.UpdateProject)
+let g:WhichKeyDesc_git_update = "<leader>gu Update/Pull"
+nmap <leader>gb <Action>(Git.Branches)
+let g:WhichKeyDesc_git_branches = "<leader>gb Branches"
+nmap <leader>gf <Action>(Git.Fetch)
+let g:WhichKeyDesc_git_fetch = "<leader>gf Fetch"
+nmap <leader>gr <Action>(Vcs.RollbackChangedLines)
+let g:WhichKeyDesc_git_revert = "<leader>gr Revert lines"
+nmap <leader>gh <Action>(Vcs.ShowTabbedFileHistory)
+let g:WhichKeyDesc_git_history = "<leader>gh History"
+nmap <leader>ga <Action>(Annotate)
+let g:WhichKeyDesc_git_annotate = "<leader>ga Annotate/Blame"
+nmap <leader>gd <Action>(Compare.SameVersion)
+let g:WhichKeyDesc_git_diff = "<leader>gd Diff"
+nmap <leader>gt <Action>(ActivateVersionControlToolWindow)
+let g:WhichKeyDesc_git_tool = "<leader>gt Git tool window"
 
 " ========================================
 " Bookmarks

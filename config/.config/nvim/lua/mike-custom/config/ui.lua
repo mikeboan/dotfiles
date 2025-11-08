@@ -4,7 +4,7 @@ return {
 	{
 		"folke/tokyonight.nvim",
 		priority = 1000, -- Ensure it loads first
-		-- enabled = false,
+		enabled = true,
 		config = function()
 			-- Configure tokyonight with telescope integration
 			require("tokyonight").setup({
@@ -63,9 +63,9 @@ return {
 		priority = 1000,
 		enabled = false,
 		config = function()
-			if not vim.env.INTELLIJ then
-				vim.cmd.colorscheme("nord")
-			end
+			-- if not vim.env.INTELLIJ then
+			-- 	vim.cmd.colorscheme("nord")
+			-- end
 		end,
 	},
 	{
@@ -172,5 +172,52 @@ return {
 		config = function()
 			require("tiny-glimmer").setup({ enabled = true })
 		end,
+	},
+
+	-- Zen mode for distraction-free coding
+	{
+		"folke/zen-mode.nvim",
+		cmd = "ZenMode",
+		keys = {
+			{
+				"<leader>z",
+				function()
+					require("zen-mode").toggle()
+				end,
+				desc = "Toggle Zen Mode",
+			},
+		},
+		opts = {
+			window = {
+				width = 120, -- Width of zen window
+				options = {
+					signcolumn = "no", -- Disable signcolumn
+					number = false, -- Disable number column
+					relativenumber = false, -- Disable relative numbers
+					cursorline = false, -- Disable cursor line
+					cursorcolumn = false, -- Disable cursor column
+					foldcolumn = "0", -- Disable fold column
+					list = false, -- Disable whitespace characters
+				},
+			},
+			plugins = {
+				-- Disable some things during zen mode
+				options = {
+					enabled = true,
+					ruler = false, -- Disables the ruler text in the cmd line area
+					showcmd = false, -- Disables the command in the last line of the screen
+					laststatus = 0, -- Hides the statusline
+				},
+				twilight = { enabled = false }, -- Can enable if you want dim unfocused code
+				gitsigns = { enabled = false }, -- Disables git signs
+				tmux = { enabled = false }, -- Disables tmux statusline
+			},
+			on_open = function()
+				-- Optional: additional actions when entering zen mode
+			end,
+			on_close = function()
+				-- Optional: additional actions when exiting zen mode
+			end,
+		},
 	},
 }
