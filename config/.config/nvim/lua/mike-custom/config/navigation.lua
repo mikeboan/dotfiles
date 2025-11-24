@@ -74,7 +74,13 @@ return {
 			local builtin = require("telescope.builtin")
 			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
 			vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-			vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "[F]ind [F]iles" })
+			vim.keymap.set("n", "<leader>ff", function()
+				builtin.find_files({
+					hidden = true,
+					no_ignore = false,
+					no_ignore_parent = false,
+				})
+			end, { desc = "[F]ind [F]iles" })
 			vim.keymap.set("n", "<leader>fs", builtin.builtin, { desc = "[F]ind [S]elect Telescope" })
 			vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
 			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
@@ -171,6 +177,7 @@ return {
 				{ "<leader>s", group = "[S]plit" },
 				{ "<leader>e", group = "[E]xplorer" },
 				{ "<leader>t", group = "[t]est" },
+				{ "<leader>a", group = "[a]i" },
 				{ "<leader>b", group = "[b]ookmarks" },
 				{ "<leader>o", group = "[o]pen" },
 				{ "<leader>h", group = "[h]unk (git)" },

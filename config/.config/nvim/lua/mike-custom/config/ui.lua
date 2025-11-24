@@ -8,6 +8,7 @@ return {
 		config = function()
 			-- Configure tokyonight with telescope integration
 			require("tokyonight").setup({
+				style = "storm", -- Explicitly use the storm variant
 				plugins = { telescope = true },
 				on_highlights = function(hl, c)
 					local prompt = "#2d3149"
@@ -41,10 +42,13 @@ return {
 				end,
 			})
 
+			-- Get the colorscheme from environment variable (set by theme.sh)
+			local colorscheme = os.getenv("NVIM_THEME") or "tokyonight-storm"
+
 			-- I use a onedark theme in intellij, so we want to load the onedark theme
 			-- when nvim is launched from the intellij terminal. In iterm and everywhere
-			-- else we want to use tokyonight-storm.
-			if not vim.env.INTELLIJ then
+			-- else we want to use the configured theme.
+			if not vim.env.INTELLIJ and colorscheme == "tokyonight-storm" then
 				vim.cmd.colorscheme("tokyonight-storm")
 			end
 		end,
@@ -53,26 +57,32 @@ return {
 		"navarasu/onedark.nvim",
 		priority = 1000, -- make sure to load this before all the other start plugins
 		config = function()
+			local colorscheme = os.getenv("NVIM_THEME") or "tokyonight-storm"
+
 			if vim.env.INTELLIJ then
+				require("onedark").load()
+			elseif not vim.env.INTELLIJ and colorscheme == "onedark" then
 				require("onedark").load()
 			end
 		end,
 	},
-	{
-		"shaunsingh/nord.nvim",
-		priority = 1000,
-		enabled = false,
-		config = function()
-			-- if not vim.env.INTELLIJ then
-			-- 	vim.cmd.colorscheme("nord")
-			-- end
-		end,
-	},
+	-- {
+	-- 	"shaunsingh/nord.nvim",
+	-- 	priority = 1000,
+	-- 	enabled = true,
+	-- 	config = function()
+	-- 		local colorscheme = os.getenv("NVIM_THEME") or "tokyonight-storm"
+	--
+	-- 		if not vim.env.INTELLIJ and colorscheme == "nord" then
+	-- 			vim.cmd.colorscheme("nord")
+	-- 		end
+	-- 	end,
+	-- },
 	{
 		"catppuccin/nvim",
 		name = "catppuccin",
 		priority = 1000,
-		enabled = false,
+		enabled = true,
 		config = function()
 			require("catppuccin").setup({
 				integrations = {
@@ -116,17 +126,18 @@ return {
 				end,
 			})
 
-			-- Uncomment one of these to use catppuccin.
-			-- Must also turn off tokyonight.
-			-- if not vim.env.INTELLIJ then
-			-- 	-- vim.cmd.colorscheme("catppuccin-latte")
-			-- 	-- vim.cmd.colorscheme("catppuccin-frappe")
-			-- 	vim.cmd.colorscheme("catppuccin-macchiato")
-			-- 	-- vim.cmd.colorscheme("catppuccin-mocha")
-			-- end
+			local colorscheme = os.getenv("NVIM_THEME") or "tokyonight-storm"
+
+			if not vim.env.INTELLIJ then
+				if colorscheme == "catppuccin-mocha" then
+					vim.cmd.colorscheme("catppuccin-mocha")
+				elseif colorscheme == "catppuccin-macchiato" then
+					vim.cmd.colorscheme("catppuccin-macchiato")
+				end
+			end
 		end,
 	},
-
+	--
 	-- Color highlighting
 	{
 		"NvChad/nvim-colorizer.lua",

@@ -1,5 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+# This palette is automatically set by theme.sh / theme switcher
+# Options: tokyonight_storm, catppuccin_mocha, catppuccin_macchiato, nord, onedark
 palette = 'tokyonight_storm'
 
 format = """
@@ -285,4 +287,18 @@ yellow = "#e0af68"
 green = "#9ece6a"
 sapphire = "#7aa2f7"
 lavender = "#b7bdf8"
+
+[palettes.nord]
+red = "#bf616a"
+yellow = "#ebcb8b"
+green = "#a3be8c"
+sapphire = "#5e81ac"
+lavender = "#81a1c1"
+
+[palettes.onedark]
+red = "#e06c75"
+yellow = "#e5c07b"
+green = "#98c379"
+sapphire = "#61afef"
+lavender = "#61afef"
 

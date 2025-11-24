@@ -1,0 +1,228 @@
+#!/usr/bin/env bash
+# Theme switcher script - centralized color scheme management
+
+set -e
+
+THEME_CONFIG="$HOME/.config/dotfiles/theme.sh"
+SUPPORTED_THEMES=(
+    "tokyonight-storm"
+    "catppuccin-mocha"
+    "catppuccin-macchiato"
+    "nord"
+    "onedark"
+)
+
+# Colors for output
+BOLD='\033[1m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
+show_usage() {
+    echo -e "${BOLD}Usage:${NC} theme [THEME_NAME]"
+    echo ""
+    echo -e "${BOLD}Supported themes:${NC}"
+    for theme in "${SUPPORTED_THEMES[@]}"; do
+        echo "  - $theme"
+    done
+    echo ""
+    echo -e "${BOLD}Examples:${NC}"
+    echo "  theme tokyonight-storm"
+    echo "  theme catppuccin-mocha"
+    echo "  theme nord"
+}
+
+show_current_theme() {
+    source "$THEME_CONFIG"
+    echo -e "${BOLD}Current theme:${NC} ${GREEN}$COLORSCHEME${NC}"
+}
+
+is_valid_theme() {
+    local theme=$1
+    for valid_theme in "${SUPPORTED_THEMES[@]}"; do
+        if [[ "$theme" == "$valid_theme" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+reload_shell() {
+    echo -e "${BLUE}→${NC} Reloading zsh configuration..."
+    # Source the updated theme config
+    source "$THEME_CONFIG"
+    # Reload zshrc in current shell if possible
+    if [[ -n "$ZSH_VERSION" ]]; then
+        source "$HOME/.zshrc"
+        echo -e "  ${GREEN}✓${NC} Shell configuration reloaded"
+    else
+        echo -e "  ${YELLOW}!${NC} Please run: source ~/.zshrc"
+    fi
+}
+
+reload_tmux() {
+    echo -e "${BLUE}→${NC} Reloading tmux configuration..."
+    if command -v tmux &> /dev/null && tmux info &> /dev/null; then
+        tmux source-file ~/.tmux.conf
+        echo -e "  ${GREEN}✓${NC} Tmux configuration reloaded"
+    else
+        echo -e "  ${YELLOW}!${NC} Tmux not running (changes will apply on next start)"
+    fi
+}
+
+show_manual_steps() {
+    echo ""
+    echo -e "${BOLD}Manual steps required:${NC}"
+    echo -e "  ${YELLOW}•${NC} ${BOLD}WezTerm:${NC} Restart WezTerm or reload config (Cmd+Shift+R on macOS)"
+    echo -e "  ${YELLOW}•${NC} ${BOLD}Neovim:${NC} Restart Neovim instances"
+    echo ""
+}
+
+update_starship_palette() {
+    local new_theme=$1
+    local starship_config="$HOME/.config/starship.toml"
+
+    if [[ ! -f "$starship_config" ]]; then
+        echo -e "  ${YELLOW}!${NC} Starship config not found, skipping"
+        return
+    fi
+
+    # Update the palette line in starship.toml
+    # Convert hyphens to underscores for starship palette names
+    local starship_palette="${new_theme//-/_}"
+    local temp_file=$(mktemp)
+    while IFS= read -r line; do
+        if [[ $line =~ ^palette[[:space:]]*= ]]; then
+            echo "palette = '${starship_palette}'"
+        else
+            echo "$line"
+        fi
+    done < "$starship_config" > "$temp_file"
+
+    mv "$temp_file" "$starship_config"
+    echo -e "  ${GREEN}✓${NC} Starship palette updated"
+}
+
+update_tmux_theme() {
+    local new_theme=$1
+    local tmux_config="$HOME/.tmux.conf"
+
+    if [[ ! -f "$tmux_config" ]]; then
+        echo -e "  ${YELLOW}!${NC} Tmux config not found, skipping"
+        return
+    fi
+
+    # Source the theme to get color variables
+    source "$THEME_CONFIG"
+
+    # Generate new theme section
+    local theme_section="# Configure tmux-dotbar UI
+# Theme colors are sourced from central theme configuration
+# This section is automatically updated by the theme switcher
+# ===== THEME START (DO NOT EDIT MANUALLY) =====
+set -g @tmux-dotbar-bg \"default\"
+set -g @tmux-dotbar-fg \"$THEME_COMMENT\"                # comment - inactive window dots
+set -g @tmux-dotbar-fg-current \"$THEME_FG_DARK\"        # fg_dark - current/zoomed window
+set -g @tmux-dotbar-fg-session \"$THEME_DARK5\"          # dark5 - session name
+set -g @tmux-dotbar-fg-prefix \"$THEME_CYAN\"            # cyan - prefix indicator
+# ===== THEME END ====="
+
+    # Replace the theme section in tmux.conf
+    local temp_file=$(mktemp)
+    local in_theme_section=false
+
+    while IFS= read -r line; do
+        if [[ $line == *"===== THEME START"* ]]; then
+            in_theme_section=true
+            echo "$theme_section"
+        elif [[ $line == *"===== THEME END"* ]]; then
+            in_theme_section=false
+            continue
+        elif [[ $in_theme_section == false ]]; then
+            echo "$line"
+        fi
+    done < "$tmux_config" > "$temp_file"
+
+    mv "$temp_file" "$tmux_config"
+    echo -e "  ${GREEN}✓${NC} Tmux theme updated"
+}
+
+update_theme_config() {
+    local new_theme=$1
+
+    # Create temporary file with updated theme
+    local temp_file=$(mktemp)
+
+    # Read the current config and update the COLORSCHEME line
+    while IFS= read -r line; do
+        if [[ $line =~ ^export[[:space:]]+COLORSCHEME= ]]; then
+            echo "export COLORSCHEME=\"${new_theme}\""
+        else
+            echo "$line"
+        fi
+    done < "$THEME_CONFIG" > "$temp_file"
+
+    # Replace original file
+    mv "$temp_file" "$THEME_CONFIG"
+
+    echo -e "${GREEN}✓${NC} Theme configuration updated to: ${BOLD}$new_theme${NC}"
+
+    # Update starship config
+    update_starship_palette "$new_theme"
+
+    # Update tmux config
+    update_tmux_theme "$new_theme"
+}
+
+switch_theme() {
+    local new_theme=$1
+
+    if ! is_valid_theme "$new_theme"; then
+        echo -e "${RED}Error:${NC} '$new_theme' is not a supported theme"
+        echo ""
+        show_usage
+        exit 1
+    fi
+
+    echo -e "${BOLD}Switching to theme:${NC} ${GREEN}$new_theme${NC}"
+    echo ""
+
+    # Update the theme config file
+    update_theme_config "$new_theme"
+
+    # Reload configurations
+    reload_shell
+    reload_tmux
+
+    # Show manual steps
+    show_manual_steps
+
+    echo -e "${GREEN}✓${NC} Theme switch complete!"
+}
+
+# Main script logic
+main() {
+    if [[ $# -eq 0 ]]; then
+        show_current_theme
+        exit 0
+    fi
+
+    case "$1" in
+        -h|--help|help)
+            show_usage
+            ;;
+        -l|--list|list)
+            echo -e "${BOLD}Supported themes:${NC}"
+            for theme in "${SUPPORTED_THEMES[@]}"; do
+                echo "  - $theme"
+            done
+            ;;
+        *)
+            switch_theme "$1"
+            ;;
+    esac
+}
+
+main "$@"

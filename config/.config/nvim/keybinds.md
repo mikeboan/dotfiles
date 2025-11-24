@@ -163,6 +163,25 @@
 | `<leader>gG` | Normal | Lazygit (cwd) | keybinds.lua:129 |
 | `<leader>gc` | Normal | Open Neo[g]it in split | neogit.lua:10 |
 
+## GitHub & Pull Requests (Octo.nvim)
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>gpl` | Normal | List PRs | git.lua (octo) |
+| `<leader>gpc` | Normal | Create PR | git.lua (octo) |
+| `<leader>gpo` | Normal | Checkout PR | git.lua (octo) |
+| `<leader>gpr` | Normal | Start PR review | git.lua (octo) |
+| `<leader>gps` | Normal | PR checks (CI status) | git.lua (octo) |
+| `<leader>gpm` | Normal | Merge PR | git.lua (octo) |
+| `<leader>gil` | Normal | List issues | git.lua (octo) |
+| `<leader>gic` | Normal | Create issue | git.lua (octo) |
+| `<leader>gio` | Normal | Close issue | git.lua (octo) |
+| `<leader>grs` | Normal | Review start | git.lua (octo) |
+| `<leader>grc` | Normal | Review commit | git.lua (octo) |
+| `<leader>gra` | Normal | Review approve | git.lua (octo) |
+| `<leader>grr` | Normal | Review request changes | git.lua (octo) |
+| `<leader>gss` | Normal | Search issues/PRs | git.lua (octo) |
+
 ## Git Conflicts
 
 | Keybind | Mode | Description | File |
@@ -180,6 +199,18 @@
 |---------|------|-------------|------|
 | `<leader>e` | Normal | [E]xplorer Toggle | nvim-tree.lua:12 |
 | `-` | Normal | Open parent directory | oil.lua:7 |
+
+## Rails Navigation (Ruby files only)
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>ra` | Normal | Rails alternate file (test/implementation) | ruby.lua |
+| `<leader>rr` | Normal | Rails related file | ruby.lua |
+| `<leader>rm` | Normal | Rails open model | ruby.lua |
+| `<leader>rc` | Normal | Rails open controller | ruby.lua |
+| `<leader>rv` | Normal | Rails open view | ruby.lua |
+| `<leader>rd` | Normal | Rails open migration | ruby.lua |
+| `<leader>rs` | Normal | Rails open schema | ruby.lua |
 
 ## Session Management
 
@@ -226,15 +257,86 @@
 | `zM` | Normal | Close all folds | ufo.lua:13 |
 | `zp` | Normal | Peek fold under cursor | ufo.lua:14 |
 
-## Testing
+## Refactoring
 
 | Keybind | Mode | Description | File |
 |---------|------|-------------|------|
-| `<leader>t` | Normal | Run nearest test | vim-test.lua:20 |
-| `<leader>T` | Normal | Run file tests | vim-test.lua:21 |
-| `<leader>a` | Normal | Run all tests | vim-test.lua:22 |
-| `<leader>l` | Normal | Run last test | vim-test.lua:23 |
-| `<leader>g` | Normal | Visit test file | vim-test.lua:24 |
+| `<leader>Re` | Visual | Extract function | refactoring.lua |
+| `<leader>Rf` | Visual | Extract function to file | refactoring.lua |
+| `<leader>Rv` | Visual | Extract variable | refactoring.lua |
+| `<leader>Rc` | Visual | Extract constant (refactor menu) | refactoring.lua |
+| `<leader>Ri` | Normal/Visual | Inline variable | refactoring.lua |
+| `<leader>RI` | Normal | Inline function | refactoring.lua |
+| `<leader>Rb` | Normal | Extract block | refactoring.lua |
+| `<leader>Rbf` | Normal | Extract block to file | refactoring.lua |
+| `<leader>Rq` | Normal/Visual | Refactoring menu | refactoring.lua |
+
+## Testing (Neotest & Coverage)
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>t` | Normal | Run nearest test | testing.lua |
+| `<leader>T` | Normal | Run file tests | testing.lua |
+| `<leader>ta` | Normal | Run all tests / test suite | keybinds.lua, testing.lua |
+| `<leader>l` | Normal | Run last test | testing.lua |
+| `<leader>tv` | Normal | Visit next failed test | testing.lua |
+| `<leader>ts` | Normal | Toggle test summary | testing.lua |
+| `<leader>to` | Normal | Show test output | testing.lua |
+| `<leader>tO` | Normal | Toggle test output panel | testing.lua |
+| `<leader>td` | Normal | Debug nearest test | testing.lua |
+| `<leader>tx` | Normal | Stop test | testing.lua |
+| `<leader>tw` | Normal | Toggle watch mode | testing.lua |
+| `<leader>tc` | Normal | Show test coverage | testing.lua |
+| `<leader>tC` | Normal | Toggle coverage display | testing.lua |
+| `<leader>tcc` | Normal | Clear coverage | testing.lua |
+
+## AI Code Assistance (codecompanion.nvim)
+
+### Core Operations
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>aa` | Normal/Visual | Toggle AI chat | ai.lua |
+| `<leader>ac` | Normal/Visual | New AI chat | ai.lua |
+| `<leader>ai` | Normal/Visual | Inline AI actions | ai.lua |
+| `<leader>at` | Normal/Visual | AI actions menu | ai.lua |
+
+### Context Management
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>ab` | Normal | Add buffer to AI context | ai.lua |
+| `<leader>ad` | Normal | Add diagnostics to AI context | ai.lua |
+
+### Git Workflow
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>agg` | Normal | Generate git commit message | ai.lua |
+| `<leader>agp` | Normal | Generate PR description | ai.lua |
+
+### Testing Workflow
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>att` | Normal/Visual | Generate tests for code | ai.lua |
+| `<leader>ate` | Normal | Explain test failure | ai.lua |
+
+### Code Review & Documentation
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>arc` | Normal/Visual | AI code review suggestions | ai.lua |
+| `<leader>ard` | Normal/Visual | Generate documentation | ai.lua |
+| `<leader>are` | Normal/Visual | Explain code | ai.lua |
+
+### Refactoring
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>ars` | Normal/Visual | Suggest refactoring improvements | ai.lua |
+
+**Note**: AI namespace uses `<leader>a` (test all moved to `<leader>ta`)
 
 ## Database
 
@@ -295,13 +397,30 @@
 | `<leader>b` | Normal | Debug: Toggle Breakpoint | debug.lua:90 |
 | `<leader>B` | Normal | Debug: Set Breakpoint | debug.lua:95 |
 
-## Markdown
+## Markdown & Obsidian
+
+### Markdown Rendering
 
 | Keybind | Mode | Description | File |
 |---------|------|-------------|------|
 | `<leader>mr` | Normal | Toggle Markdown Rendering | keybinds.lua:157 |
 | `<leader>me` | Normal | Enable Markdown Rendering | keybinds.lua:158 |
 | `<leader>md` | Normal | Disable Markdown Rendering | keybinds.lua:159 |
+
+### Obsidian Vault
+
+| Keybind | Mode | Description | File |
+|---------|------|-------------|------|
+| `<leader>on` | Normal | [O]bsidian [N]otes - Quick switch | writing.lua:82 |
+| `<leader>os` | Normal | [O]bsidian [S]earch notes | writing.lua:84 |
+| `<leader>oc` | Normal | [O]bsidian [C]reate note | writing.lua:86 |
+| `<leader>od` | Normal | [O]bsidian [D]aily note | writing.lua:88 |
+| `<leader>oo` | Normal | [O]bsidian [O]pen in app | writing.lua:90 |
+| `gf` | Normal (markdown) | Follow Obsidian link | writing.lua:92 |
+| `<leader>ob` | Normal | [O]bsidian [B]acklinks | writing.lua:94 |
+| `<leader>ol` | Visual | [O]bsidian [L]ink from selection | writing.lua:96 |
+| `<leader>oL` | Visual | [O]bsidian [L]ink new note | writing.lua:98 |
+| `<leader>ot` | Normal | [O]bsidian [T]emplate | writing.lua:100 |
 
 ## Inspection & Debugging
 

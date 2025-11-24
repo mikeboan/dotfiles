@@ -1,18 +1,232 @@
 -- Test runners and debugging
 return {
-	-- Test runner integration
+	-- Modern test runner with inline results
 	{
-		"vim-test/vim-test",
+		"nvim-neotest/neotest",
 		dependencies = {
-			"preservim/vimux",
+			"nvim-neotest/nvim-nio",
+			"nvim-lua/plenary.nvim",
+			"antoinemadec/FixCursorHold.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			-- Test adapters
+			"nvim-neotest/neotest-jest",
+			"nvim-neotest/neotest-python",
+			"olimorris/neotest-rspec",
+			"marilari88/neotest-vitest",
+		},
+		keys = {
+			-- Core test operations (matching ideavimrc pattern)
+			{
+				"<leader>t",
+				function()
+					require("neotest").run.run()
+				end,
+				desc = "Run nearest test",
+			},
+			{
+				"<leader>T",
+				function()
+					require("neotest").run.run(vim.fn.expand("%"))
+				end,
+				desc = "Run file tests",
+			},
+			{
+				"<leader>a",
+				function()
+					require("neotest").run.run(vim.fn.getcwd())
+				end,
+				desc = "Run all tests",
+			},
+			{
+				"<leader>l",
+				function()
+					require("neotest").run.run_last()
+				end,
+				desc = "Run last test",
+			},
+			{
+				"<leader>tv",
+				function()
+					require("neotest").jump.next({ status = "failed" })
+				end,
+				desc = "Visit next failed test",
+			},
+			-- Neotest UI features
+			{
+				"<leader>ts",
+				function()
+					require("neotest").summary.toggle()
+				end,
+				desc = "Toggle test summary",
+			},
+			{
+				"<leader>to",
+				function()
+					require("neotest").output.open({ enter = true, auto_close = true })
+				end,
+				desc = "Show test output",
+			},
+			{
+				"<leader>tO",
+				function()
+					require("neotest").output_panel.toggle()
+				end,
+				desc = "Toggle test output panel",
+			},
+			-- Debug test
+			{
+				"<leader>td",
+				function()
+					require("neotest").run.run({ strategy = "dap" })
+				end,
+				desc = "Debug nearest test",
+			},
+			-- Stop test
+			{
+				"<leader>tx",
+				function()
+					require("neotest").run.stop()
+				end,
+				desc = "Stop test",
+			},
+			-- Watch tests
+			{
+				"<leader>tw",
+				function()
+					require("neotest").watch.toggle(vim.fn.expand("%"))
+				end,
+				desc = "Toggle watch mode",
+			},
 		},
 		config = function()
-			vim.keymap.set("n", "<leader>t", ":TestNearest<CR>", {})
-			vim.keymap.set("n", "<leader>T", ":TestFile<CR>", {})
-			vim.keymap.set("n", "<leader>a", ":TestSuite<CR>", {})
-			vim.keymap.set("n", "<leader>l", ":TestLast<CR>", {})
-			vim.keymap.set("n", "<leader>g", ":TestVisit<CR>", {})
-			vim.cmd("let test#strategy = 'vimux'")
+			require("neotest").setup({
+				adapters = {
+					-- Jest for TypeScript, JavaScript, React, Angular
+					require("neotest-jest")({
+						jestCommand = "npm test --",
+						jestConfigFile = "jest.config.js",
+						env = { CI = true },
+						cwd = function()
+							return vim.fn.getcwd()
+						end,
+					}),
+					-- Pytest for Python and Django
+					require("neotest-python")({
+						dap = { justMyCode = false },
+						runner = "pytest",
+						python = function()
+							-- Try to use virtual environment python
+							local venv = vim.fn.findfile("bin/python", vim.fn.getcwd() .. "/.venv")
+							if venv ~= "" then
+								return vim.fn.getcwd() .. "/.venv/bin/python"
+							end
+							return "python"
+						end,
+						args = { "--log-level", "DEBUG", "--verbose" },
+					}),
+					-- RSpec for Ruby/Rails
+					require("neotest-rspec")({
+						rspec_cmd = function()
+							return vim.tbl_flatten({
+								"bundle",
+								"exec",
+								"rspec",
+							})
+						end,
+					}),
+					-- Vitest for modern TypeScript projects
+					require("neotest-vitest"),
+				},
+				-- Display configuration
+				icons = {
+					passed = "✓",
+					running = "●",
+					failed = "✗",
+					skipped = "○",
+					unknown = "?",
+				},
+				-- Inline virtual text
+				output = {
+					open_on_run = false,
+				},
+				-- Status signs in gutter
+				status = {
+					enabled = true,
+					virtual_text = true,
+					signs = true,
+				},
+				-- Floating windows
+				floating = {
+					border = "rounded",
+					max_height = 0.8,
+					max_width = 0.9,
+				},
+			})
+		end,
+	},
+
+	-- Test coverage visualization
+	{
+		"andythigpen/nvim-coverage",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		keys = {
+			{
+				"<leader>tc",
+				function()
+					require("coverage").load(true)
+					require("coverage").show()
+				end,
+				desc = "Show test coverage",
+			},
+			{
+				"<leader>tC",
+				function()
+					require("coverage").toggle()
+				end,
+				desc = "Toggle coverage display",
+			},
+			{
+				"<leader>tcc",
+				function()
+					require("coverage").clear()
+				end,
+				desc = "Clear coverage",
+			},
+		},
+		config = function()
+			require("coverage").setup({
+				auto_reload = true,
+				-- Language-specific coverage commands
+				lang = {
+					python = {
+						-- Django/pytest coverage
+						coverage_command = "coverage json -q -o -",
+					},
+					javascript = {
+						-- Jest coverage
+						coverage_file = "coverage/coverage-final.json",
+					},
+					typescript = {
+						-- Jest coverage for TS
+						coverage_file = "coverage/coverage-final.json",
+					},
+					ruby = {
+						-- SimpleCov for Rails
+						coverage_file = "coverage/.resultset.json",
+					},
+				},
+				-- Visual display
+				signs = {
+					covered = { hl = "CoverageCovered", text = "▎" },
+					uncovered = { hl = "CoverageUncovered", text = "▎" },
+					partial = { hl = "CoveragePartial", text = "▎" },
+				},
+				highlights = {
+					covered = { fg = "#8ec07c" }, -- Green
+					uncovered = { fg = "#fb4934" }, -- Red
+					partial = { fg = "#fabd2f" }, -- Yellow
+				},
+			})
 		end,
 	},
 	

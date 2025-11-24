@@ -218,9 +218,11 @@ end, { desc = "Format" })
 -- These will be picked up by vim-test or neotest
 vim.keymap.set("n", "<leader>t", ":TestNearest<CR>", { desc = "Test nearest" })
 vim.keymap.set("n", "<leader>T", ":TestFile<CR>", { desc = "Test file" })
-vim.keymap.set("n", "<leader>a", ":TestSuite<CR>", { desc = "Test suite" })
+vim.keymap.set("n", "<leader>ta", ":TestSuite<CR>", { desc = "Test all/suite" })
 vim.keymap.set("n", "<leader>l", ":TestLast<CR>", { desc = "Test last" })
 vim.keymap.set("n", "<leader>tv", ":TestVisit<CR>", { desc = "Visit test file" })
+
+-- Note: <leader>a namespace is reserved for AI operations (see config/ai.lua)
 
 -- ========================================
 -- Inspection & UI

@@ -1,5 +1,106 @@
 -- Markdown, note-taking, etc.
 return {
+	-- Obsidian vault integration
+	{
+		"obsidian-nvim/obsidian.nvim",
+		version = "*",
+		lazy = true,
+		ft = "markdown",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-telescope/telescope.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		opts = {
+			workspaces = {
+				{
+					name = "MikeNotes",
+					path = "/Users/mike/Library/Mobile Documents/iCloud~md~obsidian/Documents/MikeNotes",
+				},
+			},
+
+			-- Optional: Customize note ID generation
+			note_id_func = function(title)
+				-- Create note IDs from title or random suffix
+				local suffix = ""
+				if title ~= nil then
+					-- Use title with spaces replaced by hyphens
+					suffix = title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+				else
+					-- Random suffix for untitled notes
+					for _ = 1, 4 do
+						suffix = suffix .. string.char(math.random(65, 90))
+					end
+				end
+				return suffix
+			end,
+
+			-- Daily notes configuration
+			daily_notes = {
+				folder = "daily",
+				date_format = "%Y-%m-%d",
+				alias_format = "%B %-d, %Y",
+			},
+
+			-- Completion settings
+			completion = {
+				nvim_cmp = true,
+				min_chars = 2,
+			},
+
+			-- Wiki link handling
+			follow_url_func = function(url)
+				-- Open URLs in default browser
+				vim.fn.jobstart({"open", url})
+			end,
+
+			-- Template settings
+			templates = {
+				subdir = "templates",
+				date_format = "%Y-%m-%d",
+				time_format = "%H:%M",
+			},
+
+			-- Disable frontmatter management if you prefer manual control
+			disable_frontmatter = false,
+
+			-- Use advanced URI features for following links
+			use_advanced_uri = true,
+
+			-- Finder for searching notes (using Telescope)
+			finder = "telescope.nvim",
+
+			-- Sort search results
+			sort_by = "modified",
+			sort_reversed = true,
+
+			-- Open notes in current window
+			open_notes_in = "current",
+		},
+		keys = {
+			-- Quick note switching
+			{ "<leader>on", "<cmd>ObsidianQuickSwitch<cr>", desc = "[O]bsidian [N]otes" },
+			-- Search notes
+			{ "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "[O]bsidian [S]earch" },
+			-- Create new note
+			{ "<leader>oc", "<cmd>ObsidianNew<cr>", desc = "[O]bsidian [C]reate note" },
+			-- Daily note
+			{ "<leader>od", "<cmd>ObsidianToday<cr>", desc = "[O]bsidian [D]aily note" },
+			-- Open in Obsidian app
+			{ "<leader>oo", "<cmd>ObsidianOpen<cr>", desc = "[O]bsidian [O]pen in app" },
+			-- Follow link under cursor
+			{ "gf", "<cmd>ObsidianFollowLink<cr>", desc = "Follow Obsidian link", ft = "markdown" },
+			-- Backlinks
+			{ "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "[O]bsidian [B]acklinks" },
+			-- Insert link
+			{ "<leader>ol", "<cmd>ObsidianLink<cr>", desc = "[O]bsidian [L]ink", mode = "v" },
+			-- Insert new link
+			{ "<leader>oL", "<cmd>ObsidianLinkNew<cr>", desc = "[O]bsidian [L]ink new", mode = "v" },
+			-- Templates
+			{ "<leader>ot", "<cmd>ObsidianTemplate<cr>", desc = "[O]bsidian [T]emplate" },
+		},
+	},
+
 	-- Enhanced markdown rendering
 	{
 		"MeanderingProgrammer/render-markdown.nvim",

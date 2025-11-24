@@ -1,0 +1,16 @@
+{
+  "comment": "Relaxed markdownlint config for a chiller vibe",
+
+  // Start with relaxed rules (disables: whitespace, line_length, ul-indent,
+  // no-inline-html, no-bare-urls, fenced-code-language, first-line-h1)
+  "extends": "markdownlint/style/relaxed",
+
+  // Additional rules to disable for an even chiller experience:
+  "MD012": false,  // Multiple consecutive blank lines - let me breathe!
+  "MD022": false,  // Headings surrounded by blank lines - I'll format how I want
+  "MD024": false,  // Multiple headings with same content - sometimes you need it
+  "MD025": false,  // Multiple top-level headings - especially in docs
+  "MD026": false,  // Trailing punctuation in headings - Questions? Why not!
+  "MD032": false,  // Lists surrounded by blank lines - too restrictive
+  "MD036": false   // Emphasis as heading - sometimes bold text isn't a heading
+}

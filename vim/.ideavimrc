@@ -306,8 +306,9 @@ nmap <leader>Rv <Action>(IntroduceVariable)
 let g:WhichKeyDesc_refactor_variable = "<leader>Rv Extract variable"
 nmap <leader>Rc <Action>(IntroduceConstant)
 let g:WhichKeyDesc_refactor_constant = "<leader>Rc Extract constant"
-nmap <leader>Rm <Action>(ExtractMethod)
-let g:WhichKeyDesc_refactor_method = "<leader>Rm Extract method"
+" Changed from Rm to Re to match nvim refactoring.nvim
+nmap <leader>Re <Action>(ExtractMethod)
+let g:WhichKeyDesc_refactor_extract = "<leader>Re Extract method/function"
 nmap <leader>Ri <Action>(Inline)
 let g:WhichKeyDesc_refactor_inline = "<leader>Ri Inline"
 nmap <leader>Rs <Action>(ChangeSignature)
@@ -320,7 +321,8 @@ nmap <leader>Rq <Action>(Refactorings.QuickListPopupAction)
 let g:WhichKeyDesc_refactor_quicklist = "<leader>Rq Refactoring menu"
 
 " Visual mode refactoring
-vmap <leader>Rm <Action>(ExtractMethod)
+" Changed from Rm to Re to match nvim refactoring.nvim
+vmap <leader>Re <Action>(ExtractMethod)
 vmap <leader>Rv <Action>(IntroduceVariable)
 vmap <leader>Rc <Action>(IntroduceConstant)
 

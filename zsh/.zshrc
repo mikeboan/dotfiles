@@ -20,6 +20,35 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# Source central theme configuration
+source "$HOME/.config/dotfiles/theme.sh"
+
+# Configure zsh-syntax-highlighting colors using theme variables
+# Must come after sourcing oh-my-zsh and theme.sh
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[command]="fg=$THEME_GREEN"                        # green - valid commands
+ZSH_HIGHLIGHT_STYLES[alias]="fg=$THEME_GREEN"                          # green - aliases
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=$THEME_BLUE"                         # blue - builtins
+ZSH_HIGHLIGHT_STYLES[function]="fg=$THEME_BLUE"                        # blue - functions
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=$THEME_FG"    # fg
+ZSH_HIGHLIGHT_STYLES[path]="fg=$THEME_FG,underline"                    # fg with underline
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=$THEME_FG"                # fg
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]="fg=$THEME_FG"         # fg
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=$THEME_YELLOW"          # yellow - options
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=$THEME_YELLOW"          # yellow - options
+ZSH_HIGHLIGHT_STYLES[arg0]="fg=$THEME_GREEN"                           # green
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=$THEME_GREEN,italic"              # green italic
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=$THEME_GREEN"  # green - vars in strings
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]="fg=$THEME_ORANGE"   # orange - escapes
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=$THEME_ORANGE"   # orange - escapes
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=$THEME_FG"                       # fg
+ZSH_HIGHLIGHT_STYLES[comment]="fg=$THEME_COMMENT"                      # comment - dimmed
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=$THEME_RED"                    # red - errors
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=$THEME_MAGENTA"                # magenta - keywords
+
 export EDITOR='nvim'
 
 # -----
@@ -32,6 +61,7 @@ eval "$(starship init zsh)"
 
 export PATH="$PATH:$HOME/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="$PATH:$HOME/dotfiles/bin"
 
 export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 
@@ -104,8 +134,24 @@ export DAGSTER_HOME="~/.dagster_home"
 
 alias tx='tmuxinator'
 alias bj='tmuxinator start beamjobs'
+alias bj2='tmuxinator start beamjobs2'
+alias dotfiles='tmuxinator start dotfiles'
 
 alias lg='lazygit'
+
+# --- MODERN CLI TOOL ALIASES --- #
+# Use modern replacements with convenient shortcuts
+# alias cat='bat'              # bat instead of cat
+# alias ls='eza'               # eza instead of ls
+# alias ll='eza -lah'          # long format with all files
+# alias lt='eza --tree'        # tree view
+# alias df='duf'               # duf instead of df
+# alias du='dust'              # dust instead of du
+# alias ps='procs'             # procs instead of ps
+# alias top='btop'             # btop instead of top
+
+# Git delta configuration (better diffs)
+export GIT_PAGER='delta'
 
 # --- LOCAL CONFIG --- #
 # Source local config if it exists (for work-specific settings, secrets, etc.)

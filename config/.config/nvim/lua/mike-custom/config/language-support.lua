@@ -49,6 +49,9 @@ return {
 					-- JSON/YAML
 					"jsonls",         -- JSON
 					"yamlls",         -- YAML
+
+					-- SQL
+					"sqlls",          -- SQL (PostgreSQL, MySQL, etc.)
 				},
 				automatic_installation = true,
 			})
@@ -496,7 +499,8 @@ return {
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				python = { "black" },
+				-- Use Ruff for fast Python formatting, fallback to black
+				python = { "ruff_format", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -505,6 +509,8 @@ return {
 				json = { "prettierd", "prettier", stop_after_first = true },
 				css = { "prettierd", "prettier", stop_after_first = true },
 				scss = { "prettierd", "prettier", stop_after_first = true },
+				-- SQL formatting
+				sql = { "sql_formatter" },
 			},
 		},
 	},

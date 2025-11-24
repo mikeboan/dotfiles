@@ -55,7 +55,7 @@ done
 
 # Create symlinks with Stow
 echo "🔗 Creating symlinks..."
-stow zsh tmux vim git wezterm config
+stow zsh tmux vim git wezterm config just bin markdown
 
 echo "✨ Dotfiles installation complete!"
 echo ""

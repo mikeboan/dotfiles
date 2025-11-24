@@ -28,6 +28,26 @@ cd ~/dotfiles
 ./install.sh
 ```
 
+### Alternative: Using Brewfile
+
+For faster installation with exact package versions:
+
+```bash
+cd ~/dotfiles
+
+# Install Homebrew first if needed
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Install all packages from Brewfile
+brew bundle install
+
+# Then run the rest of bootstrap (oh-my-zsh, plugins, etc)
+./bootstrap.sh
+
+# Finally, symlink dotfiles
+./install.sh
+```
+
 ### Existing System
 
 If you already have the required tools installed:
@@ -69,8 +89,31 @@ dotfiles/
 │       ├── iterm2/        # iTerm2 settings
 │       └── tmuxinator/    # Tmux session configs
 │
+├── bin/                   # Custom scripts (added to PATH)
+│   └── theme              # Theme switcher script
+│
 └── legacy/                # Archived configs for reference
     └── README.md          # Documentation for legacy configs
+```
+
+## Managing Packages
+
+### Brewfile
+
+This repo includes a `Brewfile` that tracks all Homebrew packages, casks, and taps. This makes it easy to:
+
+- Install all packages at once: `brew bundle install`
+- Update the manifest: `brew bundle dump --force`
+- Check what's installed: `brew bundle list`
+- Cleanup unused packages: `brew bundle cleanup`
+
+When you install new packages via Homebrew, remember to update the Brewfile:
+
+```bash
+cd ~/dotfiles
+brew bundle dump --force
+git add Brewfile
+git commit -m "Update Brewfile with new packages"
 ```
 
 ## Prerequisites
@@ -88,7 +131,7 @@ The `bootstrap.sh` script will install these automatically. If installing manual
 - [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting)
 - [zsh-completions](https://github.com/zsh-users/zsh-completions)
 
-### Recommended Tools
+### Essential Tools
 - [neovim](https://neovim.io/) - Text editor
 - [tmux](https://github.com/tmux/tmux) - Terminal multiplexer
 - [fzf](https://github.com/junegunn/fzf) - Fuzzy finder
@@ -97,6 +140,55 @@ The `bootstrap.sh` script will install these automatically. If installing manual
 - [zoxide](https://github.com/ajeetdsouza/zoxide) - Better cd
 - [lazygit](https://github.com/jesseduffield/lazygit) - Git TUI
 - [tmuxinator](https://github.com/tmuxinator/tmuxinator) - Tmux session manager
+
+### Modern CLI Replacements
+- [bat](https://github.com/sharkdp/bat) - Better cat with syntax highlighting
+- [eza](https://github.com/eza-community/eza) - Modern ls replacement
+- [btop](https://github.com/aristocratos/btop) - Better process viewer
+- [duf](https://github.com/muesli/duf) - Better df (disk usage)
+- [dust](https://github.com/bootandy/dust) - Better du (directory size)
+- [procs](https://github.com/dalance/procs) - Better ps (process viewer)
+- [git-delta](https://github.com/dandavison/delta) - Better git diff
+- [httpie](https://github.com/httpie/httpie) - Better curl for APIs
+
+### Development Utilities
+- [jq](https://github.com/stedolan/jq) - JSON processor
+- [yq](https://github.com/mikefarah/yq) - YAML processor
+- [tldr](https://github.com/tldr-pages/tldr) - Simplified man pages
+- [glow](https://github.com/charmbracelet/glow) - Markdown renderer
+- [slides](https://github.com/maaslalani/slides) - Terminal presentations
+
+### Version Managers
+- [asdf](https://asdf-vm.com/) - Universal version manager
+- [pyenv](https://github.com/pyenv/pyenv) - Python version manager
+- [rbenv](https://github.com/rbenv/rbenv) - Ruby version manager
+- nvm (via oh-my-zsh) - Node version manager
+
+### Development Tools
+- [autoenv](https://github.com/hyperupcall/autoenv) - Auto-load environment
+- [watchman](https://github.com/facebook/watchman) - File watching service
+- [cocoapods](https://cocoapods.org/) - iOS dependency manager
+- [stripe](https://stripe.com/docs/cli) - Stripe CLI
+- [oauth2l](https://github.com/google/oauth2l) - OAuth2 CLI tool
+- [imagemagick](https://imagemagick.org/) - Image manipulation
+- [ffmpeg](https://ffmpeg.org/) - Video processing
+
+### Databases
+- [postgresql@14](https://www.postgresql.org/) - PostgreSQL 14
+- [postgresql@15](https://www.postgresql.org/) - PostgreSQL 15
+- [redis](https://redis.io/) - Redis database
+
+### GUI Applications
+- [WezTerm](https://wezfurlong.org/wezterm/) - Primary terminal
+- [iTerm2](https://iterm2.com/) - Backup terminal
+- [Chromium](https://www.chromium.org/) - Web browser
+- [Firefox](https://www.mozilla.org/firefox/) - Web browser
+- [HiddenBar](https://github.com/dwarvesf/hidden) - Menu bar manager
+- [Keka](https://www.keka.io/) - Archive manager
+- [VLC](https://www.videolan.org/vlc/) - Media player
+- [Postman](https://www.postman.com/) - API testing
+- [ngrok](https://ngrok.com/) - Tunneling service
+- [Hack Nerd Font](https://www.nerdfonts.com/) - Terminal icons
 
 ## Local Configuration
 

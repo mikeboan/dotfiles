@@ -202,6 +202,204 @@ return {
 		end,
 	},
 
+	-- ===================================================================
+	-- BIDIRECTIONAL FILE SYNCING
+	-- Auto-save and auto-reload for seamless integration with external tools
+	-- ===================================================================
+	{
+		"tmillr/sos.nvim",
+		-- Event-driven loading: only activate when actually editing files
+		event = { "BufEnter", "FocusGained" },
+		opts = {
+			-- ============================================================
+			-- AUTOSAVE CONFIGURATION
+			-- Automatically saves modified buffers after a timeout period
+			-- ============================================================
+
+			-- Timeout in milliseconds before triggering autosave
+			-- Default: 10000 (10 seconds) - longer than most plugins to avoid conflicts
+			-- The timer resets on every buffer change, so rapid typing won't trigger premature saves
+			timeout = 10000,
+
+			-- Should all buffers be saved, or just the current one?
+			-- true  = :wall (save all modified buffers)
+			-- false = :write (save only current buffer)
+			-- Recommended: false to avoid saving unrelated buffers you might not want saved yet
+			save_on_cmd = "some", -- "all" | "some" | "none"
+
+			-- Should we save buffers when Neovim loses focus?
+			-- true = Ensures external tools see your latest changes immediately
+			-- This is critical for Claude Code bidirectional syncing
+			save_on_focuslost = true,
+
+			-- Should we save buffers when BufLeave fires (switching buffers)?
+			-- true = Your changes are always persisted when navigating away
+			save_on_bufleave = true,
+
+			-- ============================================================
+			-- AUTO-RELOAD CONFIGURATION
+			-- Automatically reloads buffers when files change on disk
+			-- ============================================================
+
+			-- Should we automatically run :checktime to detect external changes?
+			-- true = Critical for bidirectional syncing with Claude Code
+			-- This runs periodically to detect when external tools modify files
+			should_observe_buf = true,
+
+			-- ============================================================
+			-- BUFFER FILTERING
+			-- Determine which buffers should be auto-saved
+			-- ============================================================
+
+			-- Function to determine if a buffer should be auto-saved
+			-- Returns true if buffer should be saved, false otherwise
+			on_timer = function()
+				local buf = vim.api.nvim_get_current_buf()
+
+				-- Get buffer properties
+				local buftype = vim.bo[buf].buftype
+				local filetype = vim.bo[buf].filetype
+				local bufname = vim.api.nvim_buf_get_name(buf)
+				local modifiable = vim.bo[buf].modifiable
+				local modified = vim.bo[buf].modified
+
+				-- ========================================
+				-- EXCLUSION RULES (return false to skip)
+				-- ========================================
+
+				-- Skip special buffer types (terminal, quickfix, help, etc.)
+				if buftype ~= "" then
+					return false
+				end
+
+				-- Skip non-modifiable buffers (read-only files)
+				if not modifiable then
+					return false
+				end
+
+				-- Skip if buffer hasn't been modified
+				if not modified then
+					return false
+				end
+
+				-- Skip unnamed/scratch buffers (no filename)
+				if bufname == "" or bufname == nil then
+					return false
+				end
+
+				-- Skip git commit messages (never autosave these!)
+				if filetype == "gitcommit" or filetype == "gitrebase" then
+					return false
+				end
+
+				-- Skip log files (you probably don't want to save log viewers)
+				if bufname:match("%.log$") then
+					return false
+				end
+
+				-- Skip temporary directories
+				if bufname:match("^/tmp/") or bufname:match("^/var/tmp/") then
+					return false
+				end
+
+				-- Skip system log directories
+				if bufname:match("^/var/log/") then
+					return false
+				end
+
+				-- Check if buffer has manually disabled autosave via :AutosaveOff
+				-- (We'll add this command below)
+				if vim.b[buf].autosave_disabled then
+					return false
+				end
+
+				-- ========================================
+				-- PASSED ALL CHECKS - SAFE TO SAVE
+				-- ========================================
+				return true
+			end,
+		},
+
+		-- ============================================================
+		-- ADDITIONAL SETUP: Commands and Auto-reload Notifications
+		-- ============================================================
+		config = function(_, opts)
+			-- Setup the plugin with our options
+			require("sos").setup(opts)
+
+			-- ========================================
+			-- MANUAL TOGGLE COMMANDS
+			-- Per-buffer commands to disable/enable autosave
+			-- ========================================
+
+			-- :AutosaveOff - Disable autosave for current buffer
+			vim.api.nvim_create_user_command("AutosaveOff", function()
+				vim.b.autosave_disabled = true
+				vim.notify("Autosave disabled for this buffer", vim.log.levels.INFO)
+			end, {
+				desc = "Disable autosave for current buffer",
+			})
+
+			-- :AutosaveOn - Re-enable autosave for current buffer
+			vim.api.nvim_create_user_command("AutosaveOn", function()
+				vim.b.autosave_disabled = false
+				vim.notify("Autosave enabled for this buffer", vim.log.levels.INFO)
+			end, {
+				desc = "Enable autosave for current buffer",
+			})
+
+			-- ========================================
+			-- AUTO-RELOAD NOTIFICATION
+			-- Notify user when external changes are detected
+			-- ========================================
+
+			-- Track the last notification time per buffer to avoid spam
+			local last_notify_time = {}
+			local notify_cooldown_ms = 2000 -- Don't notify more than once per 2 seconds per buffer
+
+			-- Listen for FileChangedShellPost event (fires after external change detected)
+			vim.api.nvim_create_autocmd("FileChangedShellPost", {
+				group = vim.api.nvim_create_augroup("sos-reload-notify", { clear = true }),
+				callback = function(args)
+					local buf = args.buf
+					local bufname = vim.api.nvim_buf_get_name(buf)
+					local filename = vim.fn.fnamemodify(bufname, ":t") -- Get just the filename
+
+					-- Check cooldown to prevent notification spam
+					local now = vim.loop.now()
+					local last_time = last_notify_time[buf] or 0
+
+					if (now - last_time) > notify_cooldown_ms then
+						vim.notify(
+							string.format("󰑓 Reloaded: %s", filename),
+							vim.log.levels.INFO,
+							{ title = "File Changed" }
+						)
+						last_notify_time[buf] = now
+					end
+				end,
+			})
+
+			-- ========================================
+			-- ENABLE NATIVE AUTOREAD
+			-- Ensures Neovim automatically reads external changes
+			-- ========================================
+			vim.opt.autoread = true
+
+			-- Trigger checktime on various events to detect external changes quickly
+			-- sos.nvim does this internally, but we're being explicit for clarity
+			vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+				group = vim.api.nvim_create_augroup("sos-checktime", { clear = true }),
+				callback = function()
+					-- checktime checks all buffers for external modifications
+					if vim.fn.getcmdwintype() == "" then -- Don't run in command window
+						vim.cmd.checktime()
+					end
+				end,
+			})
+		end,
+	},
+
 	-- Multiple cursors (like Ctrl+D in VSCode/IntelliJ)
 	-- Primary: vim-visual-multi
 	{

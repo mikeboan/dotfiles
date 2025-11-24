@@ -62,17 +62,27 @@ config.warn_about_missing_glyphs = false
 -- ===========================
 -- TERMINAL FEATURES
 -- ===========================
--- Use "wezterm" instead of "xterm-256color" for better nvim support
+-- Use "wezterm" for proper terminal capabilities and color support
 -- This enables undercurl, colored underlines, and other modern features
--- NOTE: If you experience character duplication, try "xterm-256color" instead
-config.term = "xterm-256color"
+-- Requires wezterm terminfo to be installed (handled by bootstrap.sh)
+config.term = "wezterm"
 
 -- ===========================
 -- APPEARANCE
 -- ===========================
--- config.color_scheme = "nord"
-config.color_scheme = "Tokyo Night Storm"
--- config.color_scheme = "Catppuccin Mocha"
+-- Color scheme is controlled by central theme configuration
+-- Use the `theme` command to switch between themes
+local function get_color_scheme()
+	-- Read from environment variable set by theme.sh
+	local wezterm_theme = os.getenv("WEZTERM_THEME")
+	if wezterm_theme then
+		return wezterm_theme
+	end
+	-- Default fallback
+	return "Tokyo Night Storm"
+end
+
+config.color_scheme = get_color_scheme()
 
 -- Font configuration
 -- Note: Complex harfbuzz_features can cause input issues. Uncomment if needed.
@@ -260,6 +270,19 @@ config.keys = {
 
 	-- Reload config without restarting
 	{ key = "r", mods = "CMD|SHIFT", action = act.ReloadConfiguration },
+
+	-- ===========================
+	-- CLEAR PANE (iTerm2-style)
+	-- ===========================
+	-- Clear the current tmux pane with Cmd+K
+	{
+		key = "k",
+		mods = "CMD",
+		action = act.Multiple({
+			act.SendKey({ key = "l", mods = "CTRL" }), -- Clear screen (like 'clear' command)
+			act.ClearScrollback("ScrollbackAndViewport"), -- Also clear scrollback
+		}),
+	},
 
 	-- ===========================
 	-- FONT SIZE
