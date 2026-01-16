@@ -1,5 +1,52 @@
 -- Interface and visual (colorscheme, status line, etc)
 return {
+	-- Scrollbar with diagnostic/git markers
+	{
+		"petertriho/nvim-scrollbar",
+		event = "BufReadPost",
+		dependencies = {
+			"lewis6991/gitsigns.nvim",
+		},
+		config = function()
+			local function get_color(hlgroup, attr)
+				local hl = vim.api.nvim_get_hl(0, { name = hlgroup, link = false })
+				if hl[attr] then
+					return string.format("#%06x", hl[attr])
+				end
+				return nil
+			end
+
+			local function setup_scrollbar()
+				require("scrollbar").setup({
+					handle = {
+						color = get_color("Comment", "fg"),
+					},
+					marks = {
+						Search = { color = get_color("IncSearch", "bg") },
+						Error = { color = get_color("DiagnosticError", "fg") },
+						Warn = { color = get_color("DiagnosticWarn", "fg") },
+						Info = { color = get_color("DiagnosticInfo", "fg") },
+						Hint = { color = get_color("DiagnosticHint", "fg") },
+						Misc = { color = get_color("Special", "fg") },
+					},
+					handlers = {
+						diagnostic = true,
+						gitsigns = true,
+						search = true,
+					},
+				})
+			end
+
+			setup_scrollbar()
+			require("scrollbar.handlers.gitsigns").setup()
+
+			-- Re-apply colors when colorscheme changes
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				callback = setup_scrollbar,
+			})
+		end,
+	},
+
 	-- Colorschemes
 	{
 		"folke/tokyonight.nvim",
@@ -133,6 +180,62 @@ return {
 					vim.cmd.colorscheme("catppuccin-mocha")
 				elseif colorscheme == "catppuccin-macchiato" then
 					vim.cmd.colorscheme("catppuccin-macchiato")
+				end
+			end
+		end,
+	},
+	{
+		"rebelot/kanagawa.nvim",
+		priority = 1000,
+		enabled = true,
+		config = function()
+			require("kanagawa").setup({
+				compile = false,
+				undercurl = true,
+				commentStyle = { italic = true },
+				keywordStyle = { italic = true },
+				statementStyle = { bold = true },
+				transparent = false,
+				dimInactive = false,
+				terminalColors = true,
+				colors = {
+					theme = {
+						all = {
+							ui = {
+								bg_gutter = "none",
+							},
+						},
+					},
+				},
+				overrides = function(colors)
+					local theme = colors.theme
+					return {
+						-- Borderless telescope (same style as other themes)
+						TelescopeNormal = { bg = theme.ui.bg_dim, fg = theme.ui.fg_dim },
+						TelescopeBorder = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
+						TelescopePromptNormal = { bg = theme.ui.bg_p1 },
+						TelescopePromptBorder = { bg = theme.ui.bg_p1, fg = theme.ui.bg_p1 },
+						TelescopePromptTitle = { bg = theme.ui.bg_p1, fg = theme.ui.bg_p1 },
+						TelescopePreviewTitle = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
+						TelescopeResultsTitle = { bg = theme.ui.bg_dim, fg = theme.ui.bg_dim },
+						-- Popup menu styling
+						Pmenu = { fg = theme.ui.shade0, bg = theme.ui.bg_p1 },
+						PmenuSel = { fg = "NONE", bg = theme.ui.bg_p2 },
+						PmenuSbar = { bg = theme.ui.bg_m1 },
+						PmenuThumb = { bg = theme.ui.bg_p2 },
+					}
+				end,
+			})
+
+			local colorscheme = os.getenv("NVIM_THEME") or "tokyonight-storm"
+
+			if not vim.env.INTELLIJ then
+				if colorscheme == "kanagawa-wave" then
+					vim.cmd.colorscheme("kanagawa-wave")
+				elseif colorscheme == "kanagawa-dragon" then
+					vim.cmd.colorscheme("kanagawa-dragon")
+				elseif colorscheme == "kanagawa-lotus" then
+					vim.cmd.colorscheme("kanagawa-lotus")
 				end
 			end
 		end,

@@ -9,6 +9,16 @@
 -- Enable 24-bit RGB color in the TUI (required for modern colorschemes like TokyoNight)
 vim.opt.termguicolors = true
 
+-- Blinking cursor configuration (works with WezTerm + tmux)
+-- See :help 'guicursor' for full documentation
+--
+-- Format: "mode-list:shape-blinkwait-blinkon-blinkoff"
+--   Modes: n=normal, v=visual, c=command, i=insert, ci=command-insert,
+--          ve=visual-exclusive, r=replace, cr=command-replace, o=operator-pending
+--   Shapes: block, ver25 (vertical bar 25% width), hor20 (horizontal bar 20% height)
+--   Timing: blinkwait=delay before first blink, blinkon=visible time, blinkoff=hidden time (ms)
+vim.opt.guicursor = "n-v-c:block-blinkwait300-blinkon200-blinkoff150,i-ci-ve:ver25-blinkwait300-blinkon200-blinkoff150,r-cr-o:hor20-blinkwait300-blinkon200-blinkoff150"
+
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -94,3 +104,8 @@ vim.o.foldcolumn = "1" -- '0' is not bad
 vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
+
+-- Per-project configuration
+-- Allows .nvim.lua files in project roots to customize LSP, options, etc.
+-- Example: create ~/Src/myproject/.nvim.lua to disable specific LSPs or set project-specific options
+vim.o.exrc = true

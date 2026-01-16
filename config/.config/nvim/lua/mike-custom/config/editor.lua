@@ -233,18 +233,9 @@ return {
 			save_on_focuslost = true,
 
 			-- Should we save buffers when BufLeave fires (switching buffers)?
-			-- true = Your changes are always persisted when navigating away
-			save_on_bufleave = true,
-
-			-- ============================================================
-			-- AUTO-RELOAD CONFIGURATION
-			-- Automatically reloads buffers when files change on disk
-			-- ============================================================
-
-			-- Should we automatically run :checktime to detect external changes?
-			-- true = Critical for bidirectional syncing with Claude Code
-			-- This runs periodically to detect when external tools modify files
-			should_observe_buf = true,
+			-- false = Disabled because it conflicts with oil.nvim mutations
+			-- (save_on_focuslost + timer still provide coverage)
+			save_on_bufleave = false,
 
 			-- ============================================================
 			-- BUFFER FILTERING
@@ -284,6 +275,11 @@ return {
 
 				-- Skip unnamed/scratch buffers (no filename)
 				if bufname == "" or bufname == nil then
+					return false
+				end
+
+				-- Skip oil.nvim buffers (they handle their own saving via mutations)
+				if bufname:match("^oil://") then
 					return false
 				end
 
@@ -381,6 +377,18 @@ return {
 			})
 
 			-- ========================================
+			-- EXCLUDE OIL.NVIM FROM BUFLEAVE SAVES
+			-- Oil handles its own mutations; autosave interferes
+			-- ========================================
+			vim.api.nvim_create_autocmd("BufEnter", {
+				group = vim.api.nvim_create_augroup("sos-oil-exclude", { clear = true }),
+				pattern = "oil://*",
+				callback = function()
+					vim.b.autosave_disabled = true
+				end,
+			})
+
+			-- ========================================
 			-- ENABLE NATIVE AUTOREAD
 			-- Ensures Neovim automatically reads external changes
 			-- ========================================
@@ -469,5 +477,27 @@ return {
 			vim.api.nvim_set_hl(0, "MultiCursorDisabledCursor", { link = "Visual" })
 			vim.api.nvim_set_hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
 		end,
+	},
+	{
+		"hat0uma/csvview.nvim",
+		---@module "csvview"
+		---@type CsvView.Options
+		opts = {
+			parser = { comments = { "#", "//" } },
+			keymaps = {
+				-- Text objects for selecting fields
+				textobject_field_inner = { "if", mode = { "o", "x" } },
+				textobject_field_outer = { "af", mode = { "o", "x" } },
+				-- Excel-like navigation:
+				-- Use <Tab> and <S-Tab> to move horizontally between fields.
+				-- Use <Enter> and <S-Enter> to move vertically between rows and place the cursor at the end of the field.
+				-- Note: In terminals, you may need to enable CSI-u mode to use <S-Tab> and <S-Enter>.
+				jump_next_field_end = { "<Tab>", mode = { "n", "v" } },
+				jump_prev_field_end = { "<S-Tab>", mode = { "n", "v" } },
+				jump_next_row = { "<Enter>", mode = { "n", "v" } },
+				jump_prev_row = { "<S-Enter>", mode = { "n", "v" } },
+			},
+		},
+		cmd = { "CsvViewEnable", "CsvViewDisable", "CsvViewToggle" },
 	},
 }

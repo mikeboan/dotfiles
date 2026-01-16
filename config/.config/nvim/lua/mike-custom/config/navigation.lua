@@ -1,139 +1,141 @@
 -- Moving around code and files (marks, etc.)
 return {
-	-- Fuzzy Finder (files, lsp, etc)
+	-- Fast fuzzy finder using fzf (much faster than Telescope for large projects)
 	{
-		"nvim-telescope/telescope.nvim",
+		"ibhagwan/fzf-lua",
 		event = "VimEnter",
-		branch = "0.1.x",
 		dependencies = {
-			"nvim-lua/plenary.nvim",
-			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
-				"nvim-telescope/telescope-fzf-native.nvim",
-
-				-- `build` is used to run some command when the plugin is installed/updated.
-				-- This is only run then, not every time Neovim starts up.
-				build = "make",
-
-				-- `cond` is a condition used to determine whether this plugin should be
-				-- installed and loaded.
-				cond = function()
-					return vim.fn.executable("make") == 1
-				end,
-			},
-			{ "nvim-telescope/telescope-ui-select.nvim" },
-
-			-- Useful for getting pretty icons, but requires a Nerd Font.
-			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+			"nvim-tree/nvim-web-devicons",
 		},
 		config = function()
-			-- Telescope is a fuzzy finder that comes with a lot of different things that
-			-- it can fuzzy find! It's more than just a "file finder", it can search
-			-- many different aspects of Neovim, your workspace, LSP, and more!
-			--
-			-- The easiest way to use Telescope, is to start by doing something like:
-			--  :Telescope help_tags
-			--
-			-- After running this command, a window will open up and you're able to
-			-- type in the prompt window. You'll see a list of `help_tags` options and
-			-- a corresponding preview of the help.
-			--
-			-- Two important keymaps to use while in Telescope are:
-			--  - Insert mode: <c-/>
-			--  - Normal mode: ?
-			--
-			-- This opens a window that shows you all of the keymaps for the current
-			-- Telescope picker. This is really useful to discover what Telescope can
-			-- do as well as how to actually do it!
+			-- fzf-lua is significantly faster than Telescope, especially on large codebases
+			-- It uses native fzf under the hood while providing a clean Lua API
+			local fzf = require("fzf-lua")
 
-			-- [[ Configure Telescope ]]
-			-- See `:help telescope` and `:help telescope.setup()`
-			require("telescope").setup({
-				-- You can put your default mappings / updates / etc. in here
-				--  All the info you're looking for is in `:help telescope.setup()`
-				--
-				defaults = {
-					layout_strategy = "horizontal",
-					path_display = { "smart" },
-					--   mappings = {
-					--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-					--   },
+			fzf.setup({
+				"telescope",
+				"hide",
+				winopts = {
+					height = 0.85,
+					width = 0.85,
+					row = 0.35,
+					col = 0.50,
+					border = "rounded",
+					preview = {
+						layout = "horizontal",
+						horizontal = "right:50%",
+						-- scrollbar = "border",
+					},
 				},
-				-- pickers = {}
-				extensions = {
-					["ui-select"] = {
-						require("telescope.themes").get_dropdown(),
+				keymap = {
+					fzf = {
+						["ctrl-q"] = "select-all+accept",
+					},
+				},
+				files = {
+					-- Use fd for faster file finding
+					find_opts = [[-type f -not -path '*/\.git/*' -not -path '*/node_modules/*' -not -path '*/.angular/*' -not -path '*/dist/*']],
+					fd_opts = "--color=never --type f --hidden --follow --exclude .git --exclude node_modules --exclude .angular --exclude dist",
+					git_icons = true,
+					file_icons = true,
+				},
+				grep = {
+					-- Use ripgrep for fast grepping (--hidden to include dotfiles like .config)
+					rg_opts = "--column --line-number --no-heading --color=always --smart-case --max-columns=4096 --hidden -g '!{.git,node_modules,.angular,dist}/*'",
+				},
+				lsp = {
+					symbols = {
+						symbol_icons = {
+							File = "",
+							Module = "",
+							Namespace = "",
+							Package = "",
+							Class = "",
+							Method = "",
+							Property = "",
+							Field = "",
+							Constructor = "",
+							Enum = "",
+							Interface = "",
+							Function = "",
+							Variable = "",
+							Constant = "",
+							String = "",
+							Number = "",
+							Boolean = "",
+							Array = "",
+							Object = "",
+							Key = "",
+							Null = "",
+						},
 					},
 				},
 			})
 
-			-- Enable Telescope extensions if they are installed
-			pcall(require("telescope").load_extension, "fzf")
-			pcall(require("telescope").load_extension, "ui-select")
+			-- File and content searching
+			vim.keymap.set("n", "<leader>sf", fzf.files, { desc = "[S]earch [F]iles" })
+			vim.keymap.set("n", "<leader>sg", fzf.live_grep, { desc = "[S]earch by [G]rep" })
+			vim.keymap.set("n", "<leader>sw", fzf.grep_cword, { desc = "[S]earch current [W]ord" })
+			vim.keymap.set("n", "<leader>s/", fzf.lgrep_curbuf, { desc = "[S]earch [/] in current buffer" })
+			vim.keymap.set("n", "<leader>/", fzf.blines, { desc = "[/] Fuzzily search in current buffer" })
 
-			-- See `:help telescope.builtin`
-			local builtin = require("telescope.builtin")
-			vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "[F]ind [H]elp" })
-			vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "[F]ind [K]eymaps" })
-			vim.keymap.set("n", "<leader>ff", function()
-				builtin.find_files({
-					hidden = true,
-					no_ignore = false,
-					no_ignore_parent = false,
-				})
-			end, { desc = "[F]ind [F]iles" })
-			vim.keymap.set("n", "<leader>fs", builtin.builtin, { desc = "[F]ind [S]elect Telescope" })
-			vim.keymap.set("n", "<leader>fw", builtin.grep_string, { desc = "[F]ind current [W]ord" })
-			vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "[F]ind by [G]rep" })
-			vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "[F]ind [D]iagnostics" })
-			vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "[F]ind [R]esume" })
-			vim.keymap.set("n", "<leader>f.", builtin.oldfiles, { desc = '[F]ind Recent Files ("." for repeat)' })
-			vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+			-- Buffer and file history
+			vim.keymap.set("n", "<leader><leader>", fzf.buffers, { desc = "[ ] Find existing buffers" })
+			vim.keymap.set("n", "<leader>s.", fzf.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
 
-			-- Slightly advanced example of overriding default behavior and theme
-			vim.keymap.set("n", "<leader>/", function()
-				-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-				builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
-				}))
-			end, { desc = "[/] Fuzzily search in current buffer" })
+			-- Vim/Neovim helpers
+			vim.keymap.set("n", "<leader>sh", fzf.help_tags, { desc = "[S]earch [H]elp" })
+			vim.keymap.set("n", "<leader>sk", fzf.keymaps, { desc = "[S]earch [K]eymaps" })
+			vim.keymap.set("n", "<leader>ss", fzf.builtin, { desc = "[S]earch [S]elect fzf-lua" })
+			vim.keymap.set("n", "<leader>sr", fzf.resume, { desc = "[S]earch [R]esume" })
+			vim.keymap.set("n", "<leader>sn", function()
+				fzf.files({ cwd = vim.fn.stdpath("config") })
+			end, { desc = "[S]earch [N]eovim files" })
 
-			-- It's also possible to pass additional configuration options.
-			--  See `:help telescope.builtin.live_grep()` for information about particular keys
-			vim.keymap.set("n", "<leader>f/", function()
-				builtin.live_grep({
-					grep_open_files = true,
-					prompt_title = "Live Grep in Open Files",
-				})
-			end, { desc = "[F]ind [/] in Open Files" })
+			-- LSP integrated searching
+			vim.keymap.set("n", "<leader>sd", fzf.lsp_definitions, { desc = "[S]earch [D]efinitions (LSP)" })
+			vim.keymap.set("n", "<leader>sR", fzf.lsp_references, { desc = "[S]earch [R]eferences (LSP)" })
+			vim.keymap.set("n", "<leader>si", fzf.lsp_implementations, { desc = "[S]earch [I]mplementations (LSP)" })
+			vim.keymap.set("n", "<leader>st", fzf.lsp_typedefs, { desc = "[S]earch [T]ype Definitions (LSP)" })
 
-			-- Shortcut for searching your Neovim configuration files
-			vim.keymap.set("n", "<leader>fn", function()
-				builtin.find_files({ cwd = vim.fn.stdpath("config") })
-			end, { desc = "[F]ind [N]eovim files" })
-
-			-- LSP integrated searching (using Find prefix for consistency)
-			-- Note: gd, gr, gi are the primary LSP bindings, these are alternatives via telescope
-			vim.keymap.set("n", "<leader>fd", builtin.lsp_definitions, { desc = "[F]ind [D]efinitions (LSP)" })
-			vim.keymap.set("n", "<leader>fR", builtin.lsp_references, { desc = "[F]ind [R]eferences (LSP)" })
-			vim.keymap.set("n", "<leader>fi", builtin.lsp_implementations, { desc = "[F]ind [I]mplementations (LSP)" })
-			vim.keymap.set("n", "<leader>ft", builtin.lsp_type_definitions, { desc = "[F]ind [T]ype Definitions (LSP)" })
+			-- Diagnostics
+			vim.keymap.set("n", "<leader>sD", fzf.diagnostics_document, { desc = "[S]earch [D]iagnostics in document" })
+			vim.keymap.set(
+				"n",
+				"<leader>sW",
+				fzf.diagnostics_workspace,
+				{ desc = "[S]earch diagnostics in [W]orkspace" }
+			)
 		end,
 	},
-	
+
+	-- UI select replacement for fzf-lua (replaces telescope-ui-select)
+	{
+		"ibhagwan/fzf-lua",
+		opts = function(_, opts)
+			local config = require("fzf-lua.config")
+			local actions = require("fzf-lua.actions")
+
+			-- Use fzf-lua for vim.ui.select
+			config.defaults.actions.files["ctrl-t"] = actions.file_tabedit
+			config.defaults.actions.files["ctrl-v"] = actions.file_vsplit
+			config.defaults.actions.files["ctrl-x"] = actions.file_split
+
+			-- Register as vim.ui.select handler
+			require("fzf-lua").register_ui_select()
+
+			return opts
+		end,
+	},
+
 	-- Show pending keybinds
 	{
 		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter'
+		event = "VimEnter",
 		opts = {
-			-- delay between pressing a key and opening which-key (milliseconds)
-			-- this setting is independent of vim.opt.timeoutlen
 			delay = 200,
 			icons = {
-				-- set icon mappings to true if you have a Nerd Font
 				mappings = vim.g.have_nerd_font,
-				-- If you are using a Nerd Font: set icons.keys to an empty table which will use the
-				-- default which-key.nvim defined Nerd Font icons, otherwise define a string table
 				keys = vim.g.have_nerd_font and {} or {
 					Up = "<Up> ",
 					Down = "<Down> ",
@@ -166,15 +168,13 @@ return {
 				},
 			},
 
-			-- Document existing key chains (IDE-aligned)
 			spec = {
-				{ "<leader>f", group = "[F]ind", mode = { "n", "x" } },
+				{ "<leader>s", group = "[S]earch", mode = { "n", "x" } },
 				{ "<leader>g", group = "[g]it", mode = { "n", "x" } },
 				{ "<leader>c", group = "[C]ode", mode = { "n", "x" } },
 				{ "<leader>R", group = "[R]efactor" },
 				{ "<leader>D", group = "[D]ocumentation" },
-				{ "<leader>w", group = "[W]indow" },
-				{ "<leader>s", group = "[S]plit" },
+				{ "<leader>w", group = "[W]indow/Split" },
 				{ "<leader>e", group = "[E]xplorer" },
 				{ "<leader>t", group = "[t]est" },
 				{ "<leader>a", group = "[a]i" },
@@ -188,7 +188,7 @@ return {
 			},
 		},
 	},
-	
+
 	-- Tmux/vim navigation integration
 	{
 		"christoomey/vim-tmux-navigator",
@@ -220,35 +220,31 @@ return {
 			{ "<leader>bp", "<cmd>MarksQFListAll<cr>", desc = "Previous bookmark" },
 		},
 		opts = {
-			default_mappings = true, -- Enable default mark mappings (mx, dmx, etc.)
-			cyclic = true, -- Whether mark moves wrap around buffer ends
-			force_write_shada = false, -- Save marks to shada file
-			refresh_interval = 250, -- Refresh interval for signs (ms)
+			default_mappings = true,
+			cyclic = true,
+			force_write_shada = false,
+			refresh_interval = 250,
 			sign_priority = { lower = 10, upper = 15, builtin = 8, bookmark = 20 },
 			excluded_filetypes = {
 				"qf",
 				"NvimTree",
 				"toggleterm",
-				"TelescopePrompt",
 				"alpha",
 				"netrw",
 			},
-			-- Mark groups for bookmarks (using letters a-z for bookmarks)
 			bookmark_0 = {
 				sign = "⚑",
 				virt_text = "bookmark",
 				annotate = false,
 			},
 			mappings = {
-				-- Built-in mark operations still work: m{a-zA-Z}, '{a-zA-Z}, `{a-zA-Z}
-				-- Additional convenience mappings
-				set_next = "m,", -- Set next available mark
-				next = "]m", -- Go to next mark
-				prev = "[m", -- Go to previous mark
-				preview = "m:", -- Preview mark
-				set_bookmark0 = "m0", -- Set bookmark (sign)
-				delete_bookmark = "dm-", -- Delete bookmark
-				delete_bookmark0 = "dm=", -- Delete all bookmarks
+				set_next = "m,",
+				next = "]m",
+				prev = "[m",
+				preview = "m:",
+				set_bookmark0 = "m0",
+				delete_bookmark = "dm-",
+				delete_bookmark0 = "dm=",
 			},
 		},
 	},

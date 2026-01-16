@@ -53,7 +53,7 @@ local config = {}
 -- ===========================
 -- WebGpu can cause input issues on some systems. Try "OpenGL" if you have problems.
 config.front_end = "OpenGL"
-config.animation_fps = 1
+config.animation_fps = 60
 config.max_fps = 60
 config.scrollback_lines = 10000
 config.adjust_window_size_when_changing_font_size = false
@@ -81,6 +81,41 @@ local function get_color_scheme()
 	-- Default fallback
 	return "Tokyo Night Storm"
 end
+
+-- Custom color scheme for Kanagawa Lotus (no built-in WezTerm theme)
+config.color_schemes = {
+	["Kanagawa Lotus"] = {
+		foreground = "#545464",
+		background = "#f2ecbc",
+		cursor_fg = "#f2ecbc",
+		cursor_bg = "#43436c",
+		cursor_border = "#43436c",
+		selection_fg = "#545464",
+		selection_bg = "#c9cbd1",
+		scrollbar_thumb = "#8a8980",
+		split = "#e7dba0",
+		ansi = {
+			"#545464", -- black
+			"#c84053", -- red
+			"#6f894e", -- green
+			"#de9800", -- yellow
+			"#4d699b", -- blue
+			"#624c83", -- magenta
+			"#4e8ca2", -- cyan
+			"#dcd7ba", -- white
+		},
+		brights = {
+			"#8a8980", -- bright black
+			"#d7474b", -- bright red
+			"#5e857a", -- bright green
+			"#f9d791", -- bright yellow
+			"#6693bf", -- bright blue
+			"#b35b79", -- bright magenta
+			"#5a7785", -- bright cyan
+			"#f2ecbc", -- bright white
+		},
+	},
+}
 
 config.color_scheme = get_color_scheme()
 

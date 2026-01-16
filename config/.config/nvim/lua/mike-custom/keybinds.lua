@@ -45,7 +45,17 @@ vim.keymap.set("n", "<leader>x", ":x<CR>", { desc = "Save and quit" })
 -- Config
 -- ========================================
 
-vim.keymap.set("n", "<leader>cr", "<cmd>source $MYVIMRC<CR>", { desc = "Reload config" })
+-- Reload config by clearing module cache and re-sourcing
+-- Lua caches require() calls, so we need to clear the cache first
+vim.keymap.set("n", "<leader>cr", function()
+	for name, _ in pairs(package.loaded) do
+		if name:match("^mike%-custom") then
+			package.loaded[name] = nil
+		end
+	end
+	dofile(vim.env.MYVIMRC)
+	vim.notify("Config reloaded!", vim.log.levels.INFO)
+end, { desc = "Reload config" })
 
 -- ========================================
 -- Search & Highlight
@@ -69,15 +79,15 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 -- Window/Split Management
 -- ========================================
 
--- Split creation (matches ideavimrc pattern)
-vim.keymap.set("n", "<leader>sv", "<C-W>v", { desc = "Split vertical" })
-vim.keymap.set("n", "<leader>sh", "<C-W>s", { desc = "Split horizontal" })
-vim.keymap.set("n", "<leader>sc", "<C-W>o", { desc = "Close all splits except current" })
+-- Split creation (under <leader>w for window)
+vim.keymap.set("n", "<leader>wv", "<C-W>v", { desc = "Split vertical" })
+vim.keymap.set("n", "<leader>ws", "<C-W>s", { desc = "Split horizontal" })
+vim.keymap.set("n", "<leader>wo", "<C-W>o", { desc = "Close all splits except current" })
+vim.keymap.set("n", "<leader>wd", "<C-W>c", { desc = "Delete window" })
 
 -- Alternative split bindings (keep for flexibility)
 vim.keymap.set("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
 vim.keymap.set("n", "<leader>|", "<C-W>v", { desc = "Split window right", remap = true })
-vim.keymap.set("n", "<leader>wd", "<C-W>c", { desc = "Delete window", remap = true })
 
 -- ========================================
 -- Window Resizing (leader+w+hjkl)

@@ -22,6 +22,46 @@ return { -- Autocompletion
 					"rafamadriz/friendly-snippets",
 					config = function()
 						require("luasnip.loaders.from_vscode").lazy_load()
+						-- Load Angular/NgRx/RxJS snippets
+						local angular_path = vim.fn.stdpath("data") .. "/lazy/friendly-snippets/snippets/frameworks/angular"
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = angular_path .. "/typescript.json",
+							ft = "typescript",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = angular_path .. "/html.json",
+							ft = "html",
+						})
+						-- Load Django/DRF snippets
+						local django_path = vim.fn.stdpath("data") .. "/lazy/friendly-snippets/snippets/frameworks/django"
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/models.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/views.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/urls.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/forms.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/admin.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/django_rest/views.json",
+							ft = "python",
+						})
+						require("luasnip.loaders.from_vscode").load_standalone({
+							path = django_path .. "/django_rest/serializers.json",
+							ft = "python",
+						})
 					end,
 				},
 			},
@@ -50,35 +90,19 @@ return { -- Autocompletion
 			-- Show completions even if one menu option; don't auto-insert.
 			completion = { completeopt = "menu,menuone,noinsert" },
 
-			-- For an understanding of why these mappings were
-			-- chosen, you will need to read `:help ins-completion`.
-			--
-			-- No, but seriously. Please read `:help ins-completion`, it is really good!
+			-- Vim-native keybindings: C-n/C-p navigate, C-y confirm, C-e abort
 			mapping = cmp.mapping.preset.insert({
-				-- Select the [n]ext item
-				-- ["<C-n>"] = cmp.mapping.select_next_item(),
-				-- Select the [p]revious item
-				-- ["<C-p>"] = cmp.mapping.select_prev_item(),
+				-- Navigate completion menu
+				["<C-n>"] = cmp.mapping.select_next_item(),
+				["<C-p>"] = cmp.mapping.select_prev_item(),
 
-				-- Scroll the documentation window [b]ack / [f]orward
+				-- Confirm or abort
+				["<C-y>"] = cmp.mapping.confirm({ select = true }),
+				["<C-e>"] = cmp.mapping.abort(),
+
+				-- Scroll the documentation window
 				["<C-b>"] = cmp.mapping.scroll_docs(-4),
 				["<C-f>"] = cmp.mapping.scroll_docs(4),
-
-				-- Accept ([y]es) the completion.
-				--  This will auto-import if your LSP supports it.
-				--  This will expand snippets if the LSP sent a snippet.
-				-- ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-				--
-				-- -- If you prefer more traditional completion keymaps,
-				-- you can uncomment the following lines
-				["<CR>"] = cmp.mapping.confirm({ select = true }),
-				["<Tab>"] = cmp.mapping.select_next_item(),
-				["<S-Tab>"] = cmp.mapping.select_prev_item(),
-
-				-- Manually trigger a completion from nvim-cmp.
-				--  Generally you don't need this, because nvim-cmp will display
-				--  completions whenever it has completion options available.
-				["<C-Space>"] = cmp.mapping.complete({}),
 
 				-- Think of <c-l> as moving to the right of your snippet expansion.
 				--  So if you have a snippet that's like:

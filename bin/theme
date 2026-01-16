@@ -10,6 +10,9 @@ SUPPORTED_THEMES=(
     "catppuccin-macchiato"
     "nord"
     "onedark"
+    "kanagawa-wave"
+    "kanagawa-dragon"
+    "kanagawa-lotus"
 )
 
 # Colors for output

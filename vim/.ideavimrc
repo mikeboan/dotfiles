@@ -81,18 +81,20 @@ nmap <C-k> <C-w>k
 nmap <C-j> <C-w>j
 
 " ========================================
-" Split Management
+" Window/Split Management
 " ========================================
 
-let g:WhichKeyDesc_split = "<leader>s Split"
-nmap <leader>sv <Action>(SplitVertically)
-let g:WhichKeyDesc_split_vertical = "<leader>sv Split vertical"
-nmap <leader>sh <Action>(SplitHorizontally)
-let g:WhichKeyDesc_split_horizontal = "<leader>sh Split horizontal"
-nmap <leader>sc <Action>(UnsplitAll)
-let g:WhichKeyDesc_split_close_all = "<leader>sc Close all splits"
-nmap <leader>so <Action>(MoveEditorToOppositeTabGroup)
-let g:WhichKeyDesc_split_move = "<leader>so Move to opposite group"
+let g:WhichKeyDesc_window = "<leader>w Window/Split"
+nmap <leader>wv <Action>(SplitVertically)
+let g:WhichKeyDesc_window_vertical = "<leader>wv Split vertical"
+nmap <leader>ws <Action>(SplitHorizontally)
+let g:WhichKeyDesc_window_horizontal = "<leader>ws Split horizontal"
+nmap <leader>wo <Action>(UnsplitAll)
+let g:WhichKeyDesc_window_close_all = "<leader>wo Close all splits"
+nmap <leader>wO <Action>(MoveEditorToOppositeTabGroup)
+let g:WhichKeyDesc_window_move = "<leader>wO Move to opposite group"
+nmap <leader>wd <Action>(CloseContent)
+let g:WhichKeyDesc_window_delete = "<leader>wd Delete window"
 
 " Window sizing
 nmap <leader>wh <Action>(StretchSplitToLeft)
@@ -122,26 +124,26 @@ nmap <leader>To <Action>(CloseAllEditorsButActive)
 let g:WhichKeyDesc_tab_only = "<leader>To Close other tabs"
 
 " ========================================
-" File Navigation & Search
+" Search & Navigation
 " ========================================
 
-let g:WhichKeyDesc_find = "<leader>f Find"
-nmap <leader>ff <Action>(GotoFile)
-let g:WhichKeyDesc_find_files = "<leader>ff Find files"
-nmap <leader>fr <Action>(RecentFiles)
-let g:WhichKeyDesc_find_recent = "<leader>fr Recent files"
-nmap <leader>fc <Action>(RecentChangedFiles)
-let g:WhichKeyDesc_find_changed = "<leader>fc Recently changed"
-nmap <leader>fl <Action>(RecentLocations)
-let g:WhichKeyDesc_find_locations = "<leader>fl Recent locations"
-nmap <leader>fs <Action>(GotoSymbol)
-let g:WhichKeyDesc_find_symbols = "<leader>fs Find symbols"
-nmap <leader>fa <Action>(GotoAction)
-let g:WhichKeyDesc_find_actions = "<leader>fa Find actions"
-nmap <leader>fg <Action>(FindInPath)
-let g:WhichKeyDesc_find_grep = "<leader>fg Grep in project"
-nmap <leader>fu <Action>(FindUsages)
-let g:WhichKeyDesc_find_usages = "<leader>fu Find usages"
+let g:WhichKeyDesc_search = "<leader>s Search"
+nmap <leader>sf <Action>(GotoFile)
+let g:WhichKeyDesc_search_files = "<leader>sf Search files"
+nmap <leader>sr <Action>(RecentFiles)
+let g:WhichKeyDesc_search_recent = "<leader>sr Recent files"
+nmap <leader>sc <Action>(RecentChangedFiles)
+let g:WhichKeyDesc_search_changed = "<leader>sc Recently changed"
+nmap <leader>sl <Action>(RecentLocations)
+let g:WhichKeyDesc_search_locations = "<leader>sl Recent locations"
+nmap <leader>ss <Action>(GotoSymbol)
+let g:WhichKeyDesc_search_symbols = "<leader>ss Search symbols"
+nmap <leader>sa <Action>(GotoAction)
+let g:WhichKeyDesc_search_actions = "<leader>sa Search actions"
+nmap <leader>sg <Action>(FindInPath)
+let g:WhichKeyDesc_search_grep = "<leader>sg Grep in project"
+nmap <leader>su <Action>(FindUsages)
+let g:WhichKeyDesc_search_usages = "<leader>su Search usages"
 
 " Quick access to recent files
 nmap <leader><leader> <Action>(RecentFiles)
@@ -429,9 +431,9 @@ nmap <leader>/ <Action>(Find)
 nmap <leader>? <Action>(FindInPath)
 nmap <leader>* <Action>(FindWordAtCaret)
 
-" Replace
-nmap <leader>sr <Action>(Replace)
-nmap <leader>sR <Action>(ReplaceInPath)
+" Replace (matches nvim <leader>r namespace)
+nmap <leader>rr <Action>(Replace)
+nmap <leader>rR <Action>(ReplaceInPath)
 
 " ========================================
 " Folding
@@ -514,8 +516,8 @@ nmap Y y$
 " Miscellaneous
 " ========================================
 
-" Toggle soft wraps
-nmap <leader>sw <Action>(ToggleUseSoftWraps)
+" Toggle soft wraps (ui namespace)
+nmap <leader>uw <Action>(ToggleUseSoftWraps)
 
 " Show all current mappings
 nmap <leader>? :map<CR>

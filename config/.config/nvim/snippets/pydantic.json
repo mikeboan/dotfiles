@@ -1,0 +1,86 @@
+{
+  "Pydantic BaseModel": {
+    "prefix": "pmodel",
+    "description": "Pydantic BaseModel class",
+    "body": [
+      "class ${1:ModelName}(BaseModel):",
+      "\t${2:field}: ${3:str}",
+      "\t$0"
+    ]
+  },
+  "Pydantic Field": {
+    "prefix": "pfield",
+    "description": "Pydantic Field with validation",
+    "body": [
+      "${1:field}: ${2:str} = Field(",
+      "\t${3:...},",
+      "\tdescription=\"${4:Field description}\",",
+      ")"
+    ]
+  },
+  "Pydantic Field Optional": {
+    "prefix": "pfieldopt",
+    "description": "Optional Pydantic Field",
+    "body": [
+      "${1:field}: ${2:str} | None = Field(",
+      "\tdefault=${3:None},",
+      "\tdescription=\"${4:Field description}\",",
+      ")"
+    ]
+  },
+  "Pydantic Validator": {
+    "prefix": "pvalidator",
+    "description": "Pydantic field_validator",
+    "body": [
+      "@field_validator(\"${1:field_name}\")",
+      "@classmethod",
+      "def validate_${1:field_name}(cls, v: ${2:str}) -> ${2:str}:",
+      "\t${3:# validation logic}",
+      "\treturn v"
+    ]
+  },
+  "Pydantic Model Validator": {
+    "prefix": "pmvalidator",
+    "description": "Pydantic model_validator",
+    "body": [
+      "@model_validator(mode=\"${1|before,after|}\")",
+      "def validate_model(self) -> Self:",
+      "\t${2:# validation logic}",
+      "\treturn self"
+    ]
+  },
+  "Pydantic BaseSettings": {
+    "prefix": "psettings",
+    "description": "Pydantic BaseSettings for config",
+    "body": [
+      "class ${1:Settings}(BaseSettings):",
+      "\t${2:api_key}: str",
+      "\t${3:debug}: bool = False",
+      "",
+      "\tmodel_config = SettingsConfigDict(",
+      "\t\tenv_file=\".env\",",
+      "\t\tenv_file_encoding=\"utf-8\",",
+      "\t)"
+    ]
+  },
+  "Pydantic Model Config": {
+    "prefix": "pconfig",
+    "description": "Pydantic model_config",
+    "body": [
+      "model_config = ConfigDict(",
+      "\t${1:strict=True},",
+      "\t${2:frozen=False},",
+      ")"
+    ]
+  },
+  "Pydantic Computed Field": {
+    "prefix": "pcomputed",
+    "description": "Pydantic computed_field",
+    "body": [
+      "@computed_field",
+      "@property",
+      "def ${1:field_name}(self) -> ${2:str}:",
+      "\treturn ${3:self.other_field}"
+    ]
+  }
+}

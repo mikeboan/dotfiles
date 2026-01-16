@@ -51,7 +51,7 @@ return {
 			-- Wiki link handling
 			follow_url_func = function(url)
 				-- Open URLs in default browser
-				vim.fn.jobstart({"open", url})
+				vim.fn.jobstart({ "open", url })
 			end,
 
 			-- Template settings
@@ -61,43 +61,64 @@ return {
 				time_format = "%H:%M",
 			},
 
-			-- Disable frontmatter management if you prefer manual control
-			disable_frontmatter = false,
+			-- Frontmatter settings
+			frontmatter = {
+				enabled = true,
+			},
 
-			-- Use advanced URI features for following links
-			use_advanced_uri = true,
+			-- Open module settings (use advanced URI for following links)
+			open = {
+				use_advanced_uri = true,
+			},
+
+			-- Search settings
+			search = {
+				sort_by = "modified",
+				sort_reversed = true,
+			},
 
 			-- Finder for searching notes (using Telescope)
 			finder = "telescope.nvim",
 
-			-- Sort search results
-			sort_by = "modified",
-			sort_reversed = true,
-
 			-- Open notes in current window
 			open_notes_in = "current",
+
+			-- Use new command format (e.g., "Obsidian backlinks" instead of "ObsidianBacklinks")
+			legacy_commands = false,
 		},
 		keys = {
+			-- Daily note - global keymap (works from any buffer, loads plugin on demand)
+			{ "<leader>od", "<cmd>Obsidian today<cr>", desc = "[O]bsidian [D]aily note" },
 			-- Quick note switching
-			{ "<leader>on", "<cmd>ObsidianQuickSwitch<cr>", desc = "[O]bsidian [N]otes" },
+			{ "<leader>on", "<cmd>Obsidian quick_switch<cr>", desc = "[O]bsidian [N]otes" },
 			-- Search notes
-			{ "<leader>os", "<cmd>ObsidianSearch<cr>", desc = "[O]bsidian [S]earch" },
+			{ "<leader>os", "<cmd>Obsidian search<cr>", desc = "[O]bsidian [S]earch" },
 			-- Create new note
-			{ "<leader>oc", "<cmd>ObsidianNew<cr>", desc = "[O]bsidian [C]reate note" },
-			-- Daily note
-			{ "<leader>od", "<cmd>ObsidianToday<cr>", desc = "[O]bsidian [D]aily note" },
-			-- Open in Obsidian app
-			{ "<leader>oo", "<cmd>ObsidianOpen<cr>", desc = "[O]bsidian [O]pen in app" },
-			-- Follow link under cursor
-			{ "gf", "<cmd>ObsidianFollowLink<cr>", desc = "Follow Obsidian link", ft = "markdown" },
-			-- Backlinks
-			{ "<leader>ob", "<cmd>ObsidianBacklinks<cr>", desc = "[O]bsidian [B]acklinks" },
-			-- Insert link
-			{ "<leader>ol", "<cmd>ObsidianLink<cr>", desc = "[O]bsidian [L]ink", mode = "v" },
-			-- Insert new link
-			{ "<leader>oL", "<cmd>ObsidianLinkNew<cr>", desc = "[O]bsidian [L]ink new", mode = "v" },
-			-- Templates
-			{ "<leader>ot", "<cmd>ObsidianTemplate<cr>", desc = "[O]bsidian [T]emplate" },
+			{ "<leader>oc", "<cmd>Obsidian new<cr>", desc = "[O]bsidian [C]reate note" },
+			-- Open in Obsidian app (markdown only - needs current file context)
+			{ "<leader>oo", "<cmd>Obsidian open<cr>", desc = "[O]bsidian [O]pen in app", ft = "markdown" },
+			-- Follow link under cursor (markdown only)
+			{ "gf", "<cmd>Obsidian follow_link<cr>", desc = "Follow Obsidian link", ft = "markdown" },
+			-- Backlinks (markdown only)
+			{ "<leader>ob", "<cmd>Obsidian backlinks<cr>", desc = "[O]bsidian [B]acklinks", ft = "markdown" },
+			-- Insert link (markdown only)
+			{
+				"<leader>ol",
+				"<cmd>Obsidian link<cr>",
+				desc = "[O]bsidian [L]ink",
+				mode = "v",
+				ft = "markdown",
+			},
+			-- Insert new link (markdown only)
+			{
+				"<leader>oL",
+				"<cmd>Obsidian link_new<cr>",
+				desc = "[O]bsidian [L]ink new",
+				mode = "v",
+				ft = "markdown",
+			},
+			-- Templates (markdown only)
+			{ "<leader>ot", "<cmd>Obsidian template<cr>", desc = "[O]bsidian [T]emplate", ft = "markdown" },
 		},
 	},
 
@@ -227,10 +248,17 @@ return {
 				style = "full",
 				-- Determines if table borders are rendered
 				border = {
-					"┌", "┬", "┐",
-					"├", "┼", "┤",
-					"└", "┴", "┘",
-					"│", "─"
+					"┌",
+					"┬",
+					"┐",
+					"├",
+					"┼",
+					"┤",
+					"└",
+					"┴",
+					"┘",
+					"│",
+					"─",
 				},
 				-- Gets placed in delimiter row for each column, position is based on alignmnet
 				alignment_indicator = "━",
@@ -292,6 +320,9 @@ return {
 			checkbox = {
 				-- Turn on / off checkbox rendering
 				enabled = true,
+				right_pad = 4,
+				-- Use overlay position to prevent text cutoff
+				-- position = "overlay",
 				-- Replaces '[ ]' of 'task_list_marker_unchecked'
 				unchecked = {
 					-- Conceal checkbox
@@ -332,10 +363,17 @@ return {
 				style = "full",
 				-- Determines if table borders are rendered
 				border = {
-					"┌", "┬", "┐",
-					"├", "┼", "┤",
-					"└", "┴", "┘",
-					"│", "─"
+					"┌",
+					"┬",
+					"┐",
+					"├",
+					"┼",
+					"┤",
+					"└",
+					"┴",
+					"┘",
+					"│",
+					"─",
 				},
 				-- Gets placed in delimiter row for each column, position is based on alignmnet
 				alignment_indicator = "━",
@@ -351,7 +389,7 @@ return {
 			require("render-markdown").setup(opts)
 		end,
 	},
-	
+
 	-- Typing practice plugin
 	{
 		"nvzone/typr",

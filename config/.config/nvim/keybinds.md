@@ -14,17 +14,21 @@
 
 | Keybind | Mode | Description | File |
 |---------|------|-------------|------|
-| `<C-h>` | Normal | Move focus to the left window | keybinds.lua:14 |
-| `<C-l>` | Normal | Move focus to the right window | keybinds.lua:15 |
-| `<C-j>` | Normal | Move focus to the lower window | keybinds.lua:16 |
-| `<C-k>` | Normal | Move focus to the upper window | keybinds.lua:17 |
-| `<C-Up>` | Normal | Increase window height | keybinds.lua:19 |
-| `<C-Down>` | Normal | Decrease window height | keybinds.lua:20 |
-| `<C-Left>` | Normal | Decrease window width | keybinds.lua:21 |
-| `<C-Right>` | Normal | Increase window width | keybinds.lua:22 |
-| `<leader>-` | Normal | Split Window Below | keybinds.lua:25 |
-| `<leader>\|` | Normal | Split Window Right | keybinds.lua:26 |
-| `<leader>wd` | Normal | Delete Window | keybinds.lua:27 |
+| `<C-h>` | Normal | Move focus to the left window | keybinds.lua |
+| `<C-l>` | Normal | Move focus to the right window | keybinds.lua |
+| `<C-j>` | Normal | Move focus to the lower window | keybinds.lua |
+| `<C-k>` | Normal | Move focus to the upper window | keybinds.lua |
+| `<leader>wv` | Normal | Split vertical | keybinds.lua |
+| `<leader>ws` | Normal | Split horizontal | keybinds.lua |
+| `<leader>wo` | Normal | Close all splits except current | keybinds.lua |
+| `<leader>wd` | Normal | Delete window | keybinds.lua |
+| `<leader>wh` | Normal | Decrease window width | keybinds.lua |
+| `<leader>wj` | Normal | Increase window height | keybinds.lua |
+| `<leader>wk` | Normal | Decrease window height | keybinds.lua |
+| `<leader>wl` | Normal | Increase window width | keybinds.lua |
+| `<leader>w=` | Normal | Equalize window sizes | keybinds.lua |
+| `<leader>-` | Normal | Split window below | keybinds.lua |
+| `<leader>\|` | Normal | Split window right | keybinds.lua |
 
 ## Visual Mode
 
@@ -71,23 +75,28 @@
 | `<leader>cf` | Normal/Visual | Force format | keybinds.lua:58 |
 | `<leader>f` | Normal/Visual | Format buffer | formatting.lua:25 |
 
-## Telescope Search
+## Search (fzf-lua)
 
 | Keybind | Mode | Description | File |
 |---------|------|-------------|------|
-| `<leader>sh` | Normal | [S]earch [H]elp | telescope.lua:15 |
-| `<leader>sk` | Normal | [S]earch [K]eymaps | telescope.lua:16 |
-| `<leader>sf` | Normal | [S]earch [F]iles | telescope.lua:17 |
-| `<leader>ss` | Normal | [S]earch [S]elect Telescope | telescope.lua:18 |
-| `<leader>sw` | Normal | [S]earch current [W]ord | telescope.lua:19 |
-| `<leader>sg` | Normal | [S]earch by [G]rep | telescope.lua:20 |
-| `<leader>sD` | Normal | [S]earch [D]iagnostics | telescope.lua:21 |
-| `<leader>sr` | Normal | [S]earch [R]esume | telescope.lua:22 |
-| `<leader>s.` | Normal | [S]earch Recent Files | telescope.lua:23 |
-| `<leader><leader>` | Normal | Find existing buffers | telescope.lua:24 |
-| `<leader>/` | Normal | Fuzzily search in current buffer | telescope.lua:31 |
-| `<leader>s/` | Normal | [S]earch [/] in Open Files | telescope.lua:37 |
-| `<leader>sn` | Normal | [S]earch [N]eovim files | telescope.lua:49 |
+| `<leader>sf` | Normal | [S]earch [F]iles | navigation.lua |
+| `<leader>sg` | Normal | [S]earch by [G]rep | navigation.lua |
+| `<leader>sw` | Normal | [S]earch current [W]ord | navigation.lua |
+| `<leader>s/` | Normal | [S]earch [/] in current buffer | navigation.lua |
+| `<leader>/` | Normal | Fuzzily search in current buffer | navigation.lua |
+| `<leader>s.` | Normal | [S]earch Recent Files | navigation.lua |
+| `<leader>sh` | Normal | [S]earch [H]elp | navigation.lua |
+| `<leader>sk` | Normal | [S]earch [K]eymaps | navigation.lua |
+| `<leader>ss` | Normal | [S]earch [S]elect fzf-lua | navigation.lua |
+| `<leader>sr` | Normal | [S]earch [R]esume | navigation.lua |
+| `<leader>sn` | Normal | [S]earch [N]eovim files | navigation.lua |
+| `<leader>sd` | Normal | [S]earch [D]efinitions (LSP) | navigation.lua |
+| `<leader>sR` | Normal | [S]earch [R]eferences (LSP) | navigation.lua |
+| `<leader>si` | Normal | [S]earch [I]mplementations (LSP) | navigation.lua |
+| `<leader>st` | Normal | [S]earch [T]ype Definitions (LSP) | navigation.lua |
+| `<leader>sD` | Normal | [S]earch [D]iagnostics in document | navigation.lua |
+| `<leader>sW` | Normal | [S]earch diagnostics in [W]orkspace | navigation.lua |
+| `<leader><leader>` | Normal | Find existing buffers | navigation.lua |
 
 ## LSP Navigation
 
@@ -211,14 +220,6 @@
 | `<leader>rv` | Normal | Rails open view | ruby.lua |
 | `<leader>rd` | Normal | Rails open migration | ruby.lua |
 | `<leader>rs` | Normal | Rails open schema | ruby.lua |
-
-## Session Management
-
-| Keybind | Mode | Description | File |
-|---------|------|-------------|------|
-| `<leader>sl` | Normal | [S]ession [L]oad | project.lua:66 |
-| `<leader>ss` | Normal | [S]ession [S]ave | project.lua:67 |
-| `<leader>sd` | Normal | [S]ession [D]elete | project.lua:68 |
 
 ## TreeSitter Text Objects
 
@@ -433,11 +434,22 @@
 
 The following leader key groups are defined for organization:
 
-- `<leader>c` → `[C]ode` group (Normal/Visual)
-- `<leader>d` → `[D]ocument` group  
-- `<leader>r` → `[R]ename` group
-- `<leader>s` → `[S]earch` group
-- `<leader>w` → `[W]orkspace` group
+- `<leader>s` → `[S]earch` group (fzf-lua fuzzy finding)
+- `<leader>g` → `[g]it` group
+- `<leader>c` → `[C]ode` group
+- `<leader>R` → `[R]efactor` group
+- `<leader>D` → `[D]ocumentation` group
+- `<leader>w` → `[W]indow/Split` group
+- `<leader>e` → `[E]xplorer` group
+- `<leader>t` → `[t]est` group
+- `<leader>a` → `[a]i` group
+- `<leader>b` → `[b]ookmarks` group
+- `<leader>o` → `[o]pen` group
+- `<leader>h` → `[h]unk (git)` group
+- `<leader>d` → `[d]ebug` group
+- `<leader>r` → `[r]eplace` group
+- `<leader>x` → `[x] diagnostics` group
+- `<leader>u` → `[u]i` group
 
 ---
 

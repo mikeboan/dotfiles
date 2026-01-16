@@ -31,17 +31,6 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 })
 
--- Auto-reload files that have been changed outside of neovim
--- (eg. git checkout, edited in another editor, etc.)
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter" }, {
-	desc = "Reload file if changed outside Neovim",
-	callback = function()
-		if vim.fn.mode() ~= "c" then -- Prevent issues in command mode
-			vim.cmd("checktime")
-		end
-	end,
-})
-
 -- Close :help buffers on 'q'
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "help",
@@ -84,9 +73,13 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	end,
 })
 
--- Autoformat file on save
-vim.api.nvim_create_autocmd("BufWritePre", {
+-- NOTE: Format on save is handled by conform.nvim in language-support.lua
+-- Do NOT add vim.lsp.buf.format() here as it would duplicate formatting
+
+-- Set conceallevel for markdown files (required for obsidian.nvim UI features)
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "markdown",
 	callback = function()
-		vim.lsp.buf.format()
+		vim.opt_local.conceallevel = 2
 	end,
 })
