@@ -60,9 +60,6 @@ windows:
         - npm run start
         - ngrok http 4200 --subdomain bjclient-mike
 
-  - :
-      root: ~/Src/beamjobs-frontend
-
   - :
       root: ~/Src/beamjobs-backend
       panes:
@@ -78,9 +75,6 @@ windows:
         - export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES &&  startPublicWorker
         - ngrok http 8080 --subdomain bjserver-mike
         - startPrivateWorker
-
-  - :
-      root: ~/Src/beamjobs-backend
 
   - :
       root: ~/

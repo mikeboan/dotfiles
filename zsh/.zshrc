@@ -74,20 +74,20 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - --no-rehash zsh)"
 
 # nvm auto-switch: automatically run `nvm use` when entering a directory with .nvmrc
-autoload -U add-zsh-hook
-load-nvmrc() {
-  local nvmrc_path="$(nvm_find_nvmrc)"
-  if [ -n "$nvmrc_path" ]; then
-    local node_version="$(nvm version "$(cat "$nvmrc_path")")"
-    if [ "$node_version" = "N/A" ]; then
-      nvm install
-    elif [ "$node_version" != "$(nvm version)" ]; then
-      nvm use
-    fi
-  fi
-}
-add-zsh-hook chpwd load-nvmrc
-load-nvmrc
+# autoload -U add-zsh-hook
+# load-nvmrc() {
+#   local nvmrc_path="$(nvm_find_nvmrc)"
+#   if [ -n "$nvmrc_path" ]; then
+#     local node_version="$(nvm version "$(cat "$nvmrc_path")")"
+#     if [ "$node_version" = "N/A" ]; then
+#       nvm install
+#     elif [ "$node_version" != "$(nvm version)" ]; then
+#       nvm use
+#     fi
+#   fi
+# }
+# add-zsh-hook chpwd load-nvmrc
+# load-nvmrc
 
 # system utilities installed via cargo (rust)
 export PATH="$PATH:$HOME/.cargo/bin"
