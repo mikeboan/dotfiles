@@ -41,9 +41,9 @@ files_to_backup=(
     ".tmux.conf"
     ".ideavimrc"
     ".gitconfig"
-    ".gitignore-global"
     ".wezterm.lua"
-    ".config"
+    ".justfile"
+    ".markdownlintrc"
 )
 
 for file in "${files_to_backup[@]}"; do
@@ -55,7 +55,7 @@ done
 
 # Create symlinks with Stow
 echo "🔗 Creating symlinks..."
-stow zsh tmux vim git wezterm config just bin markdown
+stow zsh tmux ideavim git wezterm starship nvim gh iterm2 just bin markdown
 
 echo "✨ Dotfiles installation complete!"
 echo ""

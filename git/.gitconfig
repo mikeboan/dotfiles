@@ -4,8 +4,6 @@
 
 [core]
 	editor = nvim
-	# Use a global gitignore file
-	excludesfile = ~/.gitignore-global
 
 [init]
 	defaultBranch = main
