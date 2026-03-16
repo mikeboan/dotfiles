@@ -68,6 +68,9 @@ brew "gawk"           # GNU awk
 brew "rust"           # Rust language (for cargo packages)
 brew "pipx"           # Python app installer
 
+# Session/workspace management
+brew "tmuxinator"     # Tmux session manager
+
 # Databases
 brew "postgresql@14"  # PostgreSQL 14
 brew "postgresql@15", restart_service: :changed  # PostgreSQL 15
