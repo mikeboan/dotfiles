@@ -6,33 +6,40 @@ GNU Stow-based dotfiles for macOS (Apple Silicon). Manages dev environment confi
 
 ## Directory Layout
 
-Each top-level directory is a **stow package** — its contents get symlinked into `$HOME`:
+Each top-level directory is a **tool-named stow package**. A package owns *all* config for its tool — both `~/` dotfiles and `~/.config/` files — so there's one obvious place to look for any tool's config.
 
 ```
 dotfiles/
-  git/            → .gitconfig, .gitignore-global        → ~/
-  zsh/            → .zshrc, .zshrc.local.example          → ~/
-  tmux/           → .tmux.conf                            → ~/
-  vim/            → .ideavimrc                            → ~/
-  wezterm/        → .wezterm.lua                          → ~/
-  just/           → .justfile                             → ~/
-  markdown/       → .markdownlintrc                       → ~/
-  bin/            → theme                                 → ~/bin/
+  nvim/           → ~/.config/nvim/                       # Neovim
+  tmux/           → ~/.tmux.conf, ~/.config/tmuxinator/,  # Tmux + session managers
+                    ~/.config/sesh/
+  zsh/            → ~/.zshrc                              # Shell
+  starship/       → ~/.config/starship.toml               # Prompt
+  wezterm/        → ~/.wezterm.lua                        # Terminal
+  git/            → ~/.gitconfig, ~/.config/git/ignore     # Git
+  ideavim/        → ~/.ideavimrc                          # IntelliJ IdeaVim
+  gh/             → ~/.config/gh/                         # GitHub CLI
+  iterm2/         → ~/.config/iterm2/                     # iTerm2
+  just/           → ~/.justfile                           # Command runner
+  markdown/       → ~/.markdownlintrc                     # Markdown linting
+  bin/            → ~/bin/theme, ~/.config/dotfiles/       # Custom scripts
 ```
 
 ### Other Files (Not Stow Packages)
 
-- `install.sh` — sets up stow symlinks, backs up existing files
-- `bootstrap.sh` — fresh macOS setup (Homebrew, packages, config)
-- `Brewfile` — declarative Homebrew dependencies
+- `install.sh` — stow all packages, backs up existing files
+- `bootstrap.sh` — fresh macOS setup: Homebrew, `brew bundle` from Brewfile, oh-my-zsh
+- `Brewfile` — single source of truth for all Homebrew packages and casks
 
 ## Conventions
 
 ### Stow Package Structure
 
-- One concern per package — don't mix unrelated configs
+- **One package per tool** — the package is named after the tool it configures
+- A package owns everything for that tool: `~/` dotfiles, `~/.config/` dirs, all of it
 - Files in a package mirror their target location relative to `$HOME`
-- New top-level tool config → new stow package (unless it lives under `.config/`, then use `config/`)
+- Closely related tools can share a package (e.g., tmux + tmuxinator + sesh)
+- Adding a new tool? Create a new top-level package and add it to `install.sh`
 
 ### Machine-Specific Overrides
 
