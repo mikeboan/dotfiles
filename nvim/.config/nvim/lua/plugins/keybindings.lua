@@ -15,7 +15,6 @@ return {
 				{ "<leader>h", group = "hunk" },
 				{ "<leader>c", group = "code" },
 				{ "<leader>t", group = "toggle" },
-				{ "<leader>x", group = "diagnostics" },
 				{ "<leader>m", group = "marks" },
 			},
 		},

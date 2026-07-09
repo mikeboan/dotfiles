@@ -47,18 +47,6 @@ return {
 		},
 	},
 
-	-- Comments: Neovim 0.10+ has built-in gc, but this gives more control
-	{
-		"numToStr/Comment.nvim",
-		event = { "BufReadPost", "BufNewFile" },
-		opts = {
-			-- gc{motion} - toggle comment
-			-- gcc - toggle current line
-			-- gbc - toggle block comment current line
-			-- gcO/gco/gcA - add comment above/below/end of line
-		},
-	},
-
 	-- Highlight and search TODO/FIXME/HACK/etc.
 	{
 		"folke/todo-comments.nvim",
@@ -72,54 +60,11 @@ return {
 		},
 	},
 
-	-- Indent guides
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		event = { "BufReadPost", "BufNewFile" },
-		opts = {
-			indent = {
-				char = "│",
-			},
-			scope = {
-				enabled = true,
-				show_start = false,
-				show_end = false,
-			},
-		},
-	},
-
 	-- Undo history tree viewer
 	{
 		"mbbill/undotree",
 		keys = {
 			{ "<leader>tu", "<cmd>UndotreeToggle<cr>", desc = "Toggle undotree" },
-		},
-	},
-
-	-- Better diagnostics/quickfix list
-	{
-		"folke/trouble.nvim",
-		cmd = "Trouble",
-		dependencies = { "echasnovski/mini.icons" },
-		opts = {},
-		keys = {
-			{ "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
-			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer diagnostics (Trouble)" },
-			{ "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list (Trouble)" },
-			{ "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location list (Trouble)" },
-		},
-	},
-
-	-- Center buffer on wide monitors
-	{
-		"shortcuts/no-neck-pain.nvim",
-		cmd = "NoNeckPain",
-		keys = {
-			{ "<leader>tn", "<cmd>NoNeckPain<cr>", desc = "Toggle No Neck Pain" },
-		},
-		opts = {
-			width = 120,
 		},
 	},
 }
