@@ -21,9 +21,6 @@ return {
 				"tailwindcss",
 				"emmet_ls",
 				"jsonls",
-				"yamlls",
-				"marksman",
-				"angularls",
 			},
 			automatic_installation = true,
 		},
@@ -90,8 +87,6 @@ return {
 			-- Disable servers we don't want (prevents auto-attach)
 			vim.lsp.enable("pyright", false) -- using basedpyright instead
 			vim.lsp.enable("ts_ls", false) -- using vtsls instead
-			vim.lsp.config("angularls", {})
-			vim.lsp.enable("angularls")
 
 			-- Configure LSP servers using Neovim 0.11+ native vim.lsp.config
 			vim.lsp.config("lua_ls", {
@@ -116,8 +111,6 @@ return {
 			vim.lsp.config("tailwindcss", {})
 			vim.lsp.config("emmet_ls", {})
 			vim.lsp.config("jsonls", {})
-			vim.lsp.config("yamlls", {})
-			vim.lsp.config("marksman", {})
 
 			-- Enable only the servers we want
 			vim.lsp.enable({
@@ -130,30 +123,16 @@ return {
 				"tailwindcss",
 				"emmet_ls",
 				"jsonls",
-				"yamlls",
-				"marksman",
 			})
-		end,
-	},
 
-	-- Render LSP diagnostics as virtual lines
-	{
-		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
-		event = "LspAttach",
-		config = function()
-			require("lsp_lines").setup()
-			vim.diagnostic.config({ virtual_lines = false })
+			-- Toggle diagnostics between virtual text and native virtual lines
+			vim.keymap.set("n", "<leader>tl", function()
+				local vl = vim.diagnostic.config().virtual_lines
+				vim.diagnostic.config({
+					virtual_lines = not vl,
+					virtual_text = vl and { prefix = "●" } or false,
+				})
+			end, { desc = "Toggle diagnostic virtual lines" })
 		end,
-		keys = {
-			{
-				"<leader>tl",
-				function()
-					require("lsp_lines").toggle()
-					local vl = vim.diagnostic.config().virtual_lines
-					vim.diagnostic.config({ virtual_text = not vl and { prefix = "●" } or false })
-				end,
-				desc = "Toggle LSP lines",
-			},
-		},
 	},
 }
