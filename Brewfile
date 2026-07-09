@@ -108,7 +108,6 @@ brew "postgresql@18", restart_service: :changed  # PostgreSQL 18
 
 # Terminals
 cask "kitty"          # Terminal
-cask "iterm2"         # Backup terminal
 
 # Browsers
 cask "chromium"       # Chromium browser
