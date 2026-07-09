@@ -18,7 +18,6 @@ return {
 				{ "<leader>q", group = "session" },
 				{ "<leader>x", group = "diagnostics" },
 				{ "<leader>m", group = "marks" },
-				{ "<leader>o", group = "octo" },
 			},
 		},
 		keys = {

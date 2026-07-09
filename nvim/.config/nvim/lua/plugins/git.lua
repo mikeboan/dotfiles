@@ -64,36 +64,10 @@ return {
 		},
 	},
 
-	-- Neogit - magit-style interactive git UI
-	{
-		"NeogitOrg/neogit",
-		cmd = "Neogit",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"sindrets/diffview.nvim", -- better diff UI
-		},
-		keys = {
-			{ "<leader>gg", "<cmd>Neogit<cr>", desc = "Neogit status" },
-			{ "<leader>gc", "<cmd>Neogit commit<cr>", desc = "Neogit commit" },
-			{ "<leader>gl", "<cmd>Neogit log<cr>", desc = "Neogit log" },
-		},
-		opts = {
-			integrations = {
-				diffview = true,
-			},
-		},
-	},
-
-	-- Diffview - tabpage-based diff viewer and merge tool
+	-- Diffview - kept as git mergetool only (see git/.gitconfig)
 	{
 		"sindrets/diffview.nvim",
-		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-		keys = {
-			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view (working tree)" },
-			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history (current)" },
-			{ "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "File history (repo)" },
-			{ "<leader>gq", "<cmd>DiffviewClose<cr>", desc = "Close diff view" },
-		},
+		cmd = { "DiffviewOpen", "DiffviewClose", "DiffviewFileHistory" },
 		opts = {
 			view = {
 				merge_tool = {
@@ -109,6 +83,7 @@ return {
 		"tpope/vim-fugitive",
 		cmd = { "Git", "G", "Gread", "Gwrite", "GBrowse", "Gdiffsplit" },
 		keys = {
+			{ "<leader>gg", "<cmd>Git<cr>", desc = "Git status (fugitive)" },
 			{ "<leader>gB", "<cmd>Git blame<cr>", desc = "Git blame (full file)" },
 		},
 	},
