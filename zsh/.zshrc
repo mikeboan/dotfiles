@@ -144,9 +144,8 @@ source $HOME/fzf-git.sh/fzf-git.sh
 eval "$(zoxide init zsh)"
 
 
-alias tx='tmuxinator'
-alias dotfiles='tmuxinator start dotfiles'
-alias wajtd='tmuxinator start wajtd'
+alias dotfiles='sesh connect dotfiles'
+alias wajtd='sesh connect wajtd'
 
 alias lg='lazygit'
 

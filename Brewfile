@@ -99,7 +99,7 @@ brew "teensy_loader_cli"  # Teensy flashing
 brew "bootloadhid"        # bootloadHID flashing (V-USB boards)
 
 # Session/workspace management
-brew "tmuxinator"     # Tmux session manager
+brew "sesh"           # Tmux session manager (see tmux/.config/sesh/)
 
 # Databases
 brew "postgresql@18", restart_service: :changed  # PostgreSQL 18

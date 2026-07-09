@@ -8,3 +8,7 @@ path = "~/dotfiles"
 [[session]]
 name = "ohi"
 path = "~/Projects/ohi"
+
+[[session]]
+name = "wajtd"
+path = "~/Projects/wajtd"
