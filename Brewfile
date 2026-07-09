@@ -114,9 +114,6 @@ cask "iterm2"         # Backup terminal
 cask "chromium"       # Chromium browser
 cask "firefox"        # Firefox browser
 
-# Window management
-cask "nikitabobko/tap/aerospace"  # Tiling window manager
-
 # Productivity
 cask "hiddenbar"      # Menu bar manager
 
