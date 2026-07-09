@@ -35,6 +35,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.cursorline = true
 vim.opt.termguicolors = true
 vim.opt.showmode = false
+vim.opt.laststatus = 3 -- global statusline (one bar, not one per split)
 
 -- Splits
 vim.opt.splitright = true
@@ -59,11 +60,19 @@ vim.opt.updatetime = 50
 vim.opt.timeoutlen = 300
 vim.opt.ttimeoutlen = 0
 
--- Cursor (blinking, works with tmux + wezterm)
+-- Cursor (blinking, works with tmux + kitty)
 vim.opt.guicursor = "n-v-c:block-blinkwait300-blinkon200-blinkoff150,i-ci-ve:ver25-blinkwait300-blinkon200-blinkoff150,r-cr-o:hor20-blinkwait300-blinkon200-blinkoff150"
 
 -- Per-project config
 vim.opt.exrc = true
+
+-- Start a named server so external tools can open files here (e.g. Pi /nvim)
+-- Skipped if we're nested inside another nvim instance ($NVIM is set).
+if not vim.env.NVIM then
+  local pipe = vim.fn.expand("~/.local/share/nvim/server.pipe")
+  vim.fn.delete(pipe)
+  vim.fn.serverstart(pipe)
+end
 
 -- Folding (nvim-ufo)
 vim.opt.foldcolumn = "1"
@@ -136,6 +145,17 @@ vim.api.nvim_create_autocmd({ "FocusLost", "InsertLeave" }, {
 			vim.api.nvim_buf_call(buf, function()
 				vim.cmd("silent! write")
 			end)
+		end
+	end,
+})
+
+-- Open neo-tree when nvim starts with no file arguments
+-- Shows file tree on the left with an empty buffer on the right.
+vim.api.nvim_create_autocmd("VimEnter", {
+	group = vim.api.nvim_create_augroup("open_neotree_on_start", { clear = true }),
+	callback = function()
+		if vim.fn.argc() == 0 then
+			vim.cmd("Neotree show")
 		end
 	end,
 })

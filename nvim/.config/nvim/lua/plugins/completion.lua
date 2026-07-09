@@ -36,15 +36,29 @@ return {
 				},
 				documentation = {
 					auto_show = true,
-					auto_show_delay_ms = 200,
+					auto_show_delay_ms = 500,
 					window = {
 						border = "rounded",
 					},
 				},
-				ghost_text = { enabled = true },
+				ghost_text = { enabled = false },
 			},
 			sources = {
 				default = { "lsp", "path", "snippets", "buffer" },
+				-- Don't open the menu until 2 chars typed, except after
+				-- trigger characters like `.` where LSP results are targeted.
+				min_keyword_length = function(ctx)
+					if ctx.trigger.initial_kind == "trigger_character" then
+						return 0
+					end
+					return 2
+				end,
+				providers = {
+					buffer = {
+						min_keyword_length = 4,
+						score_offset = -3,
+					},
+				},
 				per_filetype = {
 					markdown = { "path" },
 					text = { "path" },

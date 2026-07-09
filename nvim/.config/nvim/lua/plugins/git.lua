@@ -84,6 +84,26 @@ return {
 		},
 	},
 
+	-- Diffview - tabpage-based diff viewer and merge tool
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		keys = {
+			{ "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view (working tree)" },
+			{ "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history (current)" },
+			{ "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "File history (repo)" },
+			{ "<leader>gq", "<cmd>DiffviewClose<cr>", desc = "Close diff view" },
+		},
+		opts = {
+			view = {
+				merge_tool = {
+					layout = "diff3_mixed",  -- LOCAL | REMOTE on top, MERGED on bottom
+					disable_diagnostics = true,
+				},
+			},
+		},
+	},
+
 	-- Fugitive - git commands (:Git blame, :GBrowse, etc.)
 	{
 		"tpope/vim-fugitive",

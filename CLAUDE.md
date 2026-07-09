@@ -2,7 +2,7 @@
 
 ## What Is This?
 
-GNU Stow-based dotfiles for macOS (Apple Silicon). Manages dev environment config: neovim, zsh, tmux, wezterm, git, and supporting tools.
+GNU Stow-based dotfiles for macOS (Apple Silicon). Manages dev environment config: neovim, zsh, tmux, kitty, git, and supporting tools.
 
 ## Directory Layout
 
@@ -15,7 +15,8 @@ dotfiles/
                     ~/.config/sesh/
   zsh/            → ~/.zshrc                              # Shell
   starship/       → ~/.config/starship.toml               # Prompt
-  wezterm/        → ~/.wezterm.lua                        # Terminal
+  kitty/          → ~/.config/kitty/                      # Terminal
+  yazi/           → ~/.config/yazi/                       # File manager
   git/            → ~/.gitconfig, ~/.config/git/ignore     # Git
   ideavim/        → ~/.ideavimrc                          # IntelliJ IdeaVim
   gh/             → ~/.config/gh/                         # GitHub CLI
@@ -49,7 +50,7 @@ dotfiles/
 
 ### Config File Conventions
 
-- **Lua configs** (neovim, wezterm): one file per concern, imported by a central init
+- **Lua configs** (neovim): one file per concern, imported by a central init
 - **Shell configs** (zsh): single `.zshrc`, sections clearly commented
 - **Declarative configs** (tmux, git): single file per tool
 

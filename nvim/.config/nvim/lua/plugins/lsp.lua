@@ -60,22 +60,12 @@ return {
 					-- Diagnostics
 					map("[d", vim.diagnostic.goto_prev, "Previous diagnostic")
 					map("]d", vim.diagnostic.goto_next, "Next diagnostic")
-					map("<leader>d", vim.diagnostic.open_float, "Show diagnostic")
+					map("<leader>cd", vim.diagnostic.open_float, "Show diagnostic")
 
-					-- Highlight references on cursor hold
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					if client and client.server_capabilities.documentHighlightProvider then
-						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-							buffer = event.buf,
-							callback = vim.lsp.buf.document_highlight,
-						})
-						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-							buffer = event.buf,
-							callback = vim.lsp.buf.clear_references,
-						})
-					end
+					-- Reference highlighting handled by vim-illuminate (plugins/feedback.lua)
 
 					-- Toggle inlay hints (if supported)
+					local client = vim.lsp.get_client_by_id(event.data.client_id)
 					if client and client.server_capabilities.inlayHintProvider then
 						map("<leader>th", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
@@ -144,5 +134,26 @@ return {
 				"marksman",
 			})
 		end,
+	},
+
+	-- Render LSP diagnostics as virtual lines
+	{
+		"https://git.sr.ht/~whynothugo/lsp_lines.nvim",
+		event = "LspAttach",
+		config = function()
+			require("lsp_lines").setup()
+			vim.diagnostic.config({ virtual_lines = false })
+		end,
+		keys = {
+			{
+				"<leader>tl",
+				function()
+					require("lsp_lines").toggle()
+					local vl = vim.diagnostic.config().virtual_lines
+					vim.diagnostic.config({ virtual_text = not vl and { prefix = "●" } or false })
+				end,
+				desc = "Toggle LSP lines",
+			},
+		},
 	},
 }

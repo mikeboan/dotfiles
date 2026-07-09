@@ -3,10 +3,9 @@
 # Update this file with: brew bundle dump --force
 
 # Taps
-tap "heroku/brew"
 tap "homebrew/services"
-tap "ngrok/ngrok"
-tap "stripe/stripe-cli"
+tap "osx-cross/arm"
+tap "qmk/qmk"
 
 # Core utilities
 brew "stow"           # Dotfiles symlink manager
@@ -30,6 +29,15 @@ brew "duf"            # Better df (disk usage)
 brew "dust"           # Better du (directory size)
 brew "procs"          # Better ps (process viewer)
 
+# File manager
+brew "yazi"           # Terminal file manager
+brew "sevenzip"       # Archive extraction/preview (Yazi)
+brew "poppler"        # PDF preview (Yazi)
+brew "resvg"          # SVG preview (Yazi)
+# Yazi also relies on: fd, ripgrep, fzf, zoxide, jq (Core utilities),
+# imagemagick-full + ffmpeg-full (Media processing),
+# font-symbols-only-nerd-font (Fonts).
+
 # Git tools
 brew "git-delta"      # Better git diff with syntax highlighting
 
@@ -40,24 +48,31 @@ brew "httpie"         # Better curl for APIs
 brew "tldr"           # Simplified man pages
 brew "glow"           # Markdown renderer
 brew "slides"         # Terminal presentations
+# mermaid-cli (mmdc): installed as an npm global under nvm, NOT via brew.
+#   The brew formula depends on node and would reinstall a system node that
+#   shadows nvm. Install with: npm i -g @mermaid-js/mermaid-cli
+#   (used inline in nvim via diagram.nvim)
 
 # Language version managers
 brew "asdf"           # Universal version manager
-brew "pyenv"          # Python version manager
+brew "uv"             # Python package/project & version manager (replaces pyenv/poetry)
 brew "rbenv"          # Ruby version manager
 # Note: nvm installed via oh-my-zsh plugin
 
 # Environment management
 brew "autoenv"        # Auto-load environment based on directory
 
-# Media processing
-brew "imagemagick"    # Image manipulation
-brew "ffmpeg"         # Video processing
+# Media processing (full variants also power Yazi's file previews)
+# link: :overwrite == `brew link --overwrite`, so these supersede the plain
+# imagemagick/ffmpeg binaries even if pulled in as deps of other formulae.
+brew "imagemagick-full", link: :overwrite  # Image manipulation (superset of imagemagick)
+brew "ffmpeg-full", link: :overwrite       # Video processing (superset of ffmpeg)
 
 # Development tools
 brew "watchman"       # File watching service
 brew "cocoapods"      # iOS dependency manager
-brew "oauth2l"        # OAuth2 CLI tool
+brew "clang-format"   # C/C++ formatter (QMK keymaps, general C dev)
+brew "pillow"         # Python imaging libs (QMK image/OLED asset conversion)
 
 # Additional utilities
 brew "coreutils"      # GNU core utilities
@@ -66,41 +81,56 @@ brew "gnupg"          # GPG encryption
 brew "bash"           # Bash shell
 brew "gawk"           # GNU awk
 brew "rust"           # Rust language (for cargo packages)
+brew "python@3.14"    # System Python 3 (latest); use uv for project venvs
 brew "pipx"           # Python app installer
+
+# Keyboard firmware
+brew "qmk/qmk/qmk"    # QMK firmware builder (Moonlander)
+brew "arm-gcc-bin"        # ARM cross-compiler (Moonlander uses STM32)
+brew "avr-gcc"            # AVR cross-compiler (other QMK boards)
+brew "dos2unix"           # Line ending conversion (QMK dependency)
+brew "make"               # GNU make (QMK build; installed as `gmake`, also `make` via gnubin)
+# Flashing tools (qmk flash / per-bootloader). Not pulled in by the qmk formula,
+# so list explicitly or `brew bundle` won't restore them.
+brew "dfu-util"           # STM32/DFU flashing (Moonlander)
+brew "dfu-programmer"     # AVR DFU flashing
+brew "avrdude"            # AVR ISP flashing
+brew "teensy_loader_cli"  # Teensy flashing
+brew "bootloadhid"        # bootloadHID flashing (V-USB boards)
 
 # Session/workspace management
 brew "tmuxinator"     # Tmux session manager
 
 # Databases
-brew "postgresql@14"  # PostgreSQL 14
-brew "postgresql@15", restart_service: :changed  # PostgreSQL 15
-brew "redis", restart_service: :changed          # Redis database
-
-# Work-specific tools
-brew "heroku/brew/heroku"           # Heroku CLI
-brew "stripe/stripe-cli/stripe"     # Stripe CLI
+brew "postgresql@18", restart_service: :changed  # PostgreSQL 18
 
 # GUI Applications (Casks)
 
 # Terminals
-cask "wezterm"        # Primary terminal
+cask "kitty"          # Terminal
 cask "iterm2"         # Backup terminal
 
 # Browsers
 cask "chromium"       # Chromium browser
 cask "firefox"        # Firefox browser
 
+# Window management
+cask "nikitabobko/tap/aerospace"  # Tiling window manager
+
 # Productivity
 cask "hiddenbar"      # Menu bar manager
+
+# Containers
+cask "docker"         # Docker Desktop
 
 # Utilities
 cask "keka"           # Archive manager
 cask "vlc"            # Media player
 cask "postman"        # API testing
-cask "ngrok"          # Tunneling service
 
 # Fonts
-cask "font-hack-nerd-font"  # Nerd font for terminal icons
+cask "font-hack-nerd-font"           # Nerd font for terminal icons
+cask "font-symbols-only-nerd-font"   # Icon-only glyphs (Yazi file icons)
 
 # VS Code extensions (if using VS Code)
 # vscode "ms-python.python"

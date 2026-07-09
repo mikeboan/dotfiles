@@ -17,6 +17,9 @@ Thumbs.db
 .zshrc.local
 .gitconfig.local
 
+# gh auth state (per-machine, may hold tokens) — keep config.yml, ignore hosts.yml
+gh/.config/gh/hosts.yml
+
 # Backup directories
 *-backup-*/
 backup/

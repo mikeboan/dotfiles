@@ -18,6 +18,10 @@ return {
 				{ "<leader>T", group = "test" },
 				{ "<leader>q", group = "session" },
 				{ "<leader>x", group = "diagnostics" },
+				{ "<leader>m", group = "marks" },
+				{ "<leader>r", group = "refactor" },
+				{ "<leader>d", group = "debug" },
+				{ "<leader>o", group = "octo" },
 			},
 		},
 		keys = {

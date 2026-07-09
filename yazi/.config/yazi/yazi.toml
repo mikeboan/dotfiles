@@ -1,0 +1,12 @@
+# Yazi behavior — minimal layout to match the crisp theme.
+# Colors live in theme.toml (adaptive ANSI). See also the `y()` shell
+# wrapper in zsh/.zshrc (cd's to yazi's last dir on exit).
+
+[mgr]
+show_hidden   = true   # match Oil's `show_hidden = true`
+show_symlink  = true
+sort_dir_first = true
+sort_by       = "natural"
+sort_sensitive = false
+linemode      = "none" # no trailing size/perms per row — keep rows clean
+scrolloff     = 5

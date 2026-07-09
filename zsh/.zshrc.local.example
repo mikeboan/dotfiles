@@ -12,7 +12,7 @@
 # alias deploy-staging='./scripts/deploy.sh staging'
 # alias connect-vpn='sudo openvpn --config ~/work/vpn.ovpn'
 
-# Example: Project-specific shortcuts (like your BEAMJOBS utils)
+# Example: Project-specific shortcuts
 # export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 # export PUPPETEER_EXECUTABLE_PATH=`which chromium`
 # alias startClientTunnel='ngrok http 8888 --subdomain company-client-mike'

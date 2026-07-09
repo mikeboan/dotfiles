@@ -78,7 +78,6 @@ reload_tmux() {
 show_manual_steps() {
     echo ""
     echo -e "${BOLD}Manual steps required:${NC}"
-    echo -e "  ${YELLOW}•${NC} ${BOLD}WezTerm:${NC} Restart WezTerm or reload config (Cmd+Shift+R on macOS)"
     echo -e "  ${YELLOW}•${NC} ${BOLD}Neovim:${NC} Restart Neovim instances"
     echo ""
 }

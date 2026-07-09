@@ -31,7 +31,7 @@ clean:
 # Uninstall dotfiles (remove symlinks)
 uninstall:
     @echo "🔗 Uninstalling dotfiles..."
-    cd {{justfile_directory()}} && stow -D zsh tmux vim git wezterm config
+    cd {{justfile_directory()}} && stow -D zsh tmux ideavim git kitty starship nvim gh just bin markdown aerospace pi yazi
 
 # Reinstall dotfiles (uninstall then install)
 reinstall: uninstall install
@@ -46,6 +46,6 @@ backup:
 status:
     @echo "📊 Dotfiles status:"
     @echo "\nSymlinks in home directory:"
-    @ls -la ~ | grep -E '\.zshrc|\.tmux\.conf|\.ideavimrc|\.wezterm\.lua' || echo "No dotfiles symlinks found"
+    @ls -la ~ | grep -E '\.zshrc|\.tmux\.conf|\.ideavimrc' || echo "No dotfiles symlinks found"
     @echo "\nConfig directory:"
     @ls -la ~/.config | head -20

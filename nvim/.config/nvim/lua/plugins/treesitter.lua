@@ -7,6 +7,7 @@ return {
 		lazy = false,
 		config = function()
 			-- Setup with install directory
+
 			require("nvim-treesitter").setup({
 				install_dir = vim.fn.stdpath("data") .. "/site",
 			})

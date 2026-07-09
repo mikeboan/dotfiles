@@ -13,8 +13,6 @@ plugins=(
     zsh-autosuggestions
     zsh-syntax-highlighting
     nvm
-    poetry
-    heroku
     autoenv
 )
 
@@ -56,6 +54,17 @@ export EDITOR='nvim'
 # enable brew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Keep nvm's node ahead of Homebrew's.
+# The oh-my-zsh `nvm` plugin (loaded above) prepends nvm's node to PATH, but the
+# `brew shellenv` line then re-prepends /opt/homebrew/bin in front of it, so a
+# brew-installed `node` would shadow nvm. Re-assert nvm's active bin at the front.
+# Bonus: with nvm's entry now first, later `nvm use` swaps it in place — staying
+# ahead of brew instead of switching versions invisibly behind it.
+[ -n "$NVM_BIN" ] && export PATH="$NVM_BIN:$PATH"
+# Keep PATH entries unique (first occurrence wins). Collapses the duplicate nvm
+# bin that the prepend above otherwise leaves behind, and dedupes PATH generally.
+typeset -U path PATH
+
 # enable starship prompt (must come after brew)
 eval "$(starship init zsh)"
 
@@ -63,11 +72,7 @@ export PATH="$PATH:$HOME/bin"
 export PATH="$PATH:$HOME/.local/bin"
 export PATH="$PATH:$HOME/dotfiles/bin"
 
-export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
-
-# pyenv setup
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
 
 # rbenv setup
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -120,14 +125,6 @@ alias vi="nvim"
 # access vim when needed by bypassing the new vim alias
 alias oldvim="\vim"
 
-# --- BEAMJOBS UTILS --- #
-
-export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-export PUPPETEER_EXECUTABLE_PATH=`which chromium`
-
-alias startClientTunnel='ngrok http 8888 --subdomain bjclient-mike'
-alias startServerTunnel='ngrok http 8080 --subdomain bjserver-mike'
-
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
@@ -146,26 +143,42 @@ source $HOME/fzf-git.sh/fzf-git.sh
 
 eval "$(zoxide init zsh)"
 
-export DAGSTER_HOME="~/.dagster_home"
 
 alias tx='tmuxinator'
-alias bj='tmuxinator start beamjobs'
-alias bj2='tmuxinator start beamjobs2'
 alias dotfiles='tmuxinator start dotfiles'
 alias wajtd='tmuxinator start wajtd'
 
 alias lg='lazygit'
 
+# yazi: `y` launches the file manager and cd's to its last dir on exit
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ -n "$cwd" ] && [ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	command rm -f -- "$tmp"
+}
+
+# Edit current command line in $EDITOR with Ctrl+X Ctrl+E
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line
+
+# Opt+Left/Right → word-by-word cursor movement (kitty sends xterm-style sequences)
+bindkey "^[[1;3D" backward-word
+bindkey "^[[1;3C" forward-word
+
 # --- MODERN CLI TOOL ALIASES --- #
 # Use modern replacements with convenient shortcuts
-# alias cat='bat'              # bat instead of cat
-# alias ls='eza'               # eza instead of ls
-# alias ll='eza -lah'          # long format with all files
-# alias lt='eza --tree'        # tree view
-# alias df='duf'               # duf instead of df
-# alias du='dust'              # dust instead of du
-# alias ps='procs'             # procs instead of ps
-# alias top='btop'             # btop instead of top
+alias cat='bat --paging=never' # bat instead of cat (no paging so pipes work)
+alias ls='eza'                 # eza instead of ls
+alias ll='eza -lah'            # long format with all files
+alias lt='eza --tree'          # tree view
+alias df='duf'                 # duf instead of df
+alias du='dust'                # dust instead of du
+alias ps='procs'               # procs instead of ps
+alias top='btop'               # btop instead of top
+diskhog() { sudo ncdu -x "${1:-/}"; }
 
 # Git delta configuration (better diffs)
 export GIT_PAGER='delta'

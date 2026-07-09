@@ -40,7 +40,6 @@ if [[ "$COLORSCHEME" == "tokyonight-storm" ]]; then
     export THEME_TERMINAL_BLACK="#414868"
 
     # Application-specific theme names
-    export WEZTERM_THEME="Tokyo Night Storm"
     export NVIM_THEME="tokyonight-storm"
     export STARSHIP_PALETTE="tokyonight_storm"
 
@@ -78,7 +77,6 @@ elif [[ "$COLORSCHEME" == "catppuccin-mocha" ]]; then
 
     export THEME_TERMINAL_BLACK="#45475a"
 
-    export WEZTERM_THEME="Catppuccin Mocha"
     export NVIM_THEME="catppuccin-mocha"
     export STARSHIP_PALETTE="catppuccin_mocha"
 
@@ -116,7 +114,6 @@ elif [[ "$COLORSCHEME" == "catppuccin-macchiato" ]]; then
 
     export THEME_TERMINAL_BLACK="#494d64"
 
-    export WEZTERM_THEME="Catppuccin Macchiato"
     export NVIM_THEME="catppuccin-macchiato"
     export STARSHIP_PALETTE="catppuccin_macchiato"
 
@@ -154,7 +151,6 @@ elif [[ "$COLORSCHEME" == "nord" ]]; then
 
     export THEME_TERMINAL_BLACK="#3b4252"
 
-    export WEZTERM_THEME="nord"
     export NVIM_THEME="nord"
     export STARSHIP_PALETTE="nord"
 
@@ -192,7 +188,6 @@ elif [[ "$COLORSCHEME" == "onedark" ]]; then
 
     export THEME_TERMINAL_BLACK="#3e4451"
 
-    export WEZTERM_THEME="One Dark (Gogh)"
     export NVIM_THEME="onedark"
     export STARSHIP_PALETTE="onedark"
 
@@ -230,7 +225,6 @@ elif [[ "$COLORSCHEME" == "kanagawa-wave" ]]; then
 
     export THEME_TERMINAL_BLACK="#2A2A37"
 
-    export WEZTERM_THEME="Kanagawa (Gogh)"
     export NVIM_THEME="kanagawa-wave"
     export STARSHIP_PALETTE="kanagawa_wave"
 
@@ -268,7 +262,6 @@ elif [[ "$COLORSCHEME" == "kanagawa-dragon" ]]; then
 
     export THEME_TERMINAL_BLACK="#282727"
 
-    export WEZTERM_THEME="Kanagawa Dragon (Gogh)"
     export NVIM_THEME="kanagawa-dragon"
     export STARSHIP_PALETTE="kanagawa_dragon"
 
@@ -306,7 +299,6 @@ elif [[ "$COLORSCHEME" == "kanagawa-lotus" ]]; then
 
     export THEME_TERMINAL_BLACK="#c9cbd1"
 
-    export WEZTERM_THEME="Kanagawa Lotus"
     export NVIM_THEME="kanagawa-lotus"
     export STARSHIP_PALETTE="kanagawa_lotus"
 

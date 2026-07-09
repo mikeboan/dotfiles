@@ -13,6 +13,12 @@ return {
 			skip_ts = { "string" },
 			-- skip autopair when next character is closing and there are more closing than opening
 			skip_unbalanced = true,
+			mappings = {
+				-- Don't autopair backticks when previous char is already a backtick.
+				-- This lets you type ``` naturally for code fences instead of
+				-- always getting an even number of backticks.
+				['`'] = { action = 'closeopen', pair = '``', neigh_pattern = '[^\\`].', register = { cr = false } },
+			},
 		},
 	},
 
@@ -83,6 +89,14 @@ return {
 		},
 	},
 
+	-- Undo history tree viewer
+	{
+		"mbbill/undotree",
+		keys = {
+			{ "<leader>tu", "<cmd>UndotreeToggle<cr>", desc = "Toggle undotree" },
+		},
+	},
+
 	-- Better diagnostics/quickfix list
 	{
 		"folke/trouble.nvim",
@@ -94,6 +108,18 @@ return {
 			{ "<leader>xX", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Buffer diagnostics (Trouble)" },
 			{ "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list (Trouble)" },
 			{ "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location list (Trouble)" },
+		},
+	},
+
+	-- Center buffer on wide monitors
+	{
+		"shortcuts/no-neck-pain.nvim",
+		cmd = "NoNeckPain",
+		keys = {
+			{ "<leader>tn", "<cmd>NoNeckPain<cr>", desc = "Toggle No Neck Pain" },
+		},
+		opts = {
+			width = 120,
 		},
 	},
 }

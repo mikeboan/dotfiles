@@ -82,23 +82,29 @@ fi
 echo "🔧 Setting up fzf..."
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc
 
-# Install WezTerm terminfo for proper color support
+# Pi coding agent — uses the official installer which bundles its own Node binary,
+# so it stays working when you switch nvm versions.
 echo ""
-echo "🎨 Installing WezTerm terminfo..."
-if [ ! -d "$HOME/.terminfo/w/wezterm" ]; then
-    echo "   Downloading WezTerm terminfo..."
-    TEMPFILE=$(mktemp)
-    if curl -fsSL -o "$TEMPFILE" https://raw.githubusercontent.com/wez/wezterm/main/termwiz/data/wezterm.terminfo; then
-        echo "   Installing terminfo to ~/.terminfo..."
-        tic -x -o "$HOME/.terminfo" "$TEMPFILE"
-        rm "$TEMPFILE"
-        echo "✅ WezTerm terminfo installed successfully"
+echo "🤖 Installing Pi coding agent..."
+if ! command -v pi &> /dev/null; then
+    curl -fsSL https://pi.dev/install.sh | sh
+    echo "✅ Pi installed"
+else
+    echo "✅ Pi already installed"
+fi
+
+# QMK firmware setup (ZSA Moonlander)
+echo ""
+echo "⌨️  Setting up QMK firmware..."
+if command -v qmk &> /dev/null; then
+    if [ ! -d "$HOME/qmk_firmware" ]; then
+        qmk setup zsa/qmk_firmware -b firmware25 -y
+        echo "✅ QMK firmware initialized"
     else
-        echo "⚠️  Failed to download WezTerm terminfo (non-fatal)"
-        rm -f "$TEMPFILE"
+        echo "✅ QMK firmware already set up"
     fi
 else
-    echo "✅ WezTerm terminfo already installed"
+    echo "⚠️  qmk not found (skipping firmware setup)"
 fi
 
 echo ""
