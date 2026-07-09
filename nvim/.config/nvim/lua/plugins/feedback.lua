@@ -14,7 +14,7 @@ return {
 		opts = {
 			delay = 200,
 			providers = { "lsp", "treesitter", "regex" },
-			filetypes_denylist = { "neo-tree", "oil", "Trouble" },
+			filetypes_denylist = { "oil" },
 		},
 		config = function(_, opts)
 			require("illuminate").configure(opts)

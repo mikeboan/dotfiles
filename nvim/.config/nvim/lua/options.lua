@@ -149,17 +149,6 @@ vim.api.nvim_create_autocmd({ "FocusLost", "InsertLeave" }, {
 	end,
 })
 
--- Open neo-tree when nvim starts with no file arguments
--- Shows file tree on the left with an empty buffer on the right.
-vim.api.nvim_create_autocmd("VimEnter", {
-	group = vim.api.nvim_create_augroup("open_neotree_on_start", { clear = true }),
-	callback = function()
-		if vim.fn.argc() == 0 then
-			vim.cmd("Neotree show")
-		end
-	end,
-})
-
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
 	callback = function()
