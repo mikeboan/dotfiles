@@ -38,39 +38,8 @@ echo "📦 Installing packages from Brewfile..."
 brew bundle install --file="$(cd "$(dirname "$0")" && pwd)/Brewfile"
 echo "✅ Brewfile packages installed"
 
-echo ""
-echo "📦 Installing oh-my-zsh..."
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-else
-    echo "✅ oh-my-zsh is already installed"
-fi
-
-# Install oh-my-zsh plugins
-echo "📦 Installing oh-my-zsh plugins..."
-
-# zsh-autosuggestions
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
-    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-else
-    echo "✅ zsh-autosuggestions already installed"
-fi
-
-# zsh-syntax-highlighting
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-else
-    echo "✅ zsh-syntax-highlighting already installed"
-fi
-
-# zsh-completions
-if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-completions" ]; then
-    git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
-else
-    echo "✅ zsh-completions already installed"
-fi
-
 # Clone fzf-git.sh if not present
+echo ""
 echo "📦 Installing fzf-git.sh..."
 if [ ! -d "$HOME/fzf-git.sh" ]; then
     git clone https://github.com/junegunn/fzf-git.sh.git ~/fzf-git.sh

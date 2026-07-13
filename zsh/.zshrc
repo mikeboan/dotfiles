@@ -1,22 +1,15 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# enable brew (first — everything below lives in $HOMEBREW_PREFIX)
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
-fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+# Completions (brew-installed zsh-completions + system)
+fpath+="$HOMEBREW_PREFIX/share/zsh-completions"
+autoload -Uz compinit && compinit
 
-export ZSH="$HOME/.oh-my-zsh"
+# Git aliases (gst, gco, gcm, ...) vendored from oh-my-zsh's git plugin
+source "$HOME/.config/zsh/omz-git.zsh"
 
-AUTOENV_ASSUME_YES='yes' # any non-empty string indicates 'yes'
-AUTOENV_ENV_FILENAME='.beamspace'
-
-plugins=(
-    git
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    nvm
-    autoenv
-)
-
-source $ZSH/oh-my-zsh.sh
+# Fish-style inline autosuggestions
+source "$HOMEBREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
 
 # zsh-syntax-highlighting colors — Tokyo Night Storm palette
 typeset -A ZSH_HIGHLIGHT_STYLES
@@ -47,18 +40,10 @@ export EDITOR='nvim'
 
 # -----
 
-# enable brew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+# fnm — Node version manager; auto-switches on cd into dirs with .nvmrc
+eval "$(fnm env --use-on-cd --shell zsh)"
 
-# Keep nvm's node ahead of Homebrew's.
-# The oh-my-zsh `nvm` plugin (loaded above) prepends nvm's node to PATH, but the
-# `brew shellenv` line then re-prepends /opt/homebrew/bin in front of it, so a
-# brew-installed `node` would shadow nvm. Re-assert nvm's active bin at the front.
-# Bonus: with nvm's entry now first, later `nvm use` swaps it in place — staying
-# ahead of brew instead of switching versions invisibly behind it.
-[ -n "$NVM_BIN" ] && export PATH="$NVM_BIN:$PATH"
-# Keep PATH entries unique (first occurrence wins). Collapses the duplicate nvm
-# bin that the prepend above otherwise leaves behind, and dedupes PATH generally.
+# Keep PATH entries unique (first occurrence wins)
 typeset -U path PATH
 
 # enable starship prompt (must come after brew)
@@ -72,22 +57,6 @@ export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
 # rbenv setup
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init - --no-rehash zsh)"
-
-# nvm auto-switch: automatically run `nvm use` when entering a directory with .nvmrc
-# autoload -U add-zsh-hook
-# load-nvmrc() {
-#   local nvmrc_path="$(nvm_find_nvmrc)"
-#   if [ -n "$nvmrc_path" ]; then
-#     local node_version="$(nvm version "$(cat "$nvmrc_path")")"
-#     if [ "$node_version" = "N/A" ]; then
-#       nvm install
-#     elif [ "$node_version" != "$(nvm version)" ]; then
-#       nvm use
-#     fi
-#   fi
-# }
-# add-zsh-hook chpwd load-nvmrc
-# load-nvmrc
 
 # system utilities installed via cargo (rust)
 export PATH="$PATH:$HOME/.cargo/bin"
@@ -176,6 +145,9 @@ diskhog() { sudo ncdu -x "${1:-/}"; }
 
 # Git delta configuration (better diffs)
 export GIT_PAGER='delta'
+
+# Syntax highlighting (its README requires sourcing last)
+source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # --- LOCAL CONFIG --- #
 # Source local config if it exists (for work-specific settings, secrets, etc.)

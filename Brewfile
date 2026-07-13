@@ -53,14 +53,16 @@ brew "slides"         # Terminal presentations
 #   shadows nvm. Install with: npm i -g @mermaid-js/mermaid-cli
 #   (used inline in nvim via diagram.nvim)
 
+# Shell plugins (sourced directly in .zshrc — no framework)
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "zsh-completions"
+
 # Language version managers
 brew "asdf"           # Universal version manager
 brew "uv"             # Python package/project & version manager (replaces pyenv/poetry)
 brew "rbenv"          # Ruby version manager
-# Note: nvm installed via oh-my-zsh plugin
-
-# Environment management
-brew "autoenv"        # Auto-load environment based on directory
+brew "fnm"            # Node version manager (replaces nvm)
 
 # Media processing (full variants also power Yazi's file previews)
 # link: :overwrite == `brew link --overwrite`, so these supersede the plain
