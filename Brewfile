@@ -70,7 +70,6 @@ brew "ffmpeg-full", link: :overwrite       # Video processing (superset of ffmpe
 brew "watchman"       # File watching service
 brew "cocoapods"      # iOS dependency manager
 brew "clang-format"   # C/C++ formatter (QMK keymaps, general C dev)
-brew "pillow"         # Python imaging libs (QMK image/OLED asset conversion)
 
 # Additional utilities
 brew "coreutils"      # GNU core utilities
@@ -115,12 +114,11 @@ cask "firefox"        # Firefox browser
 cask "hiddenbar"      # Menu bar manager
 
 # Containers
-cask "docker"         # Docker Desktop
+cask "docker-desktop" # Docker Desktop
 
 # Utilities
 cask "keka"           # Archive manager
 cask "vlc"            # Media player
-cask "postman"        # API testing
 
 # Fonts
 cask "font-hack-nerd-font"           # Nerd font for terminal icons
