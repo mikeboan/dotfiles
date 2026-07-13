@@ -11,26 +11,26 @@ Each top-level directory is a **tool-named stow package**. A package owns *all* 
 ```
 dotfiles/
   nvim/           → ~/.config/nvim/                       # Neovim
-  tmux/           → ~/.tmux.conf, ~/.config/tmuxinator/,  # Tmux + session managers
-                    ~/.config/sesh/
-  zsh/            → ~/.zshrc                              # Shell
+  tmux/           → ~/.tmux.conf, ~/.config/sesh/          # Tmux + sesh sessions
+  zsh/            → ~/.zshrc, ~/.config/zsh/               # Shell (frameworkless)
   starship/       → ~/.config/starship.toml               # Prompt
   kitty/          → ~/.config/kitty/                      # Terminal
   yazi/           → ~/.config/yazi/                       # File manager
   git/            → ~/.gitconfig, ~/.config/git/ignore     # Git
   ideavim/        → ~/.ideavimrc                          # IntelliJ IdeaVim
   gh/             → ~/.config/gh/                         # GitHub CLI
-  iterm2/         → ~/.config/iterm2/                     # iTerm2
   just/           → ~/.justfile                           # Command runner
   markdown/       → ~/.markdownlintrc                     # Markdown linting
-  bin/            → ~/bin/theme, ~/.config/dotfiles/       # Custom scripts
+  pi/             → ~/.pi/agent/                          # Pi coding agent
 ```
 
 ### Other Files (Not Stow Packages)
 
 - `install.sh` — stow all packages, backs up existing files
-- `bootstrap.sh` — fresh macOS setup: Homebrew, `brew bundle` from Brewfile, oh-my-zsh
+- `bootstrap.sh` — fresh macOS setup: Homebrew, `brew bundle` from Brewfile, QMK, Pi
+- `BOOTSTRAP.md` — manual checklist for the unscriptable rest of a new machine
 - `Brewfile` — single source of truth for all Homebrew packages and casks
+- `docs/removed-plugins.md` — ledger of everything killed in the 2026-07 minimalism overhaul
 
 ## Conventions
 
@@ -39,7 +39,7 @@ dotfiles/
 - **One package per tool** — the package is named after the tool it configures
 - A package owns everything for that tool: `~/` dotfiles, `~/.config/` dirs, all of it
 - Files in a package mirror their target location relative to `$HOME`
-- Closely related tools can share a package (e.g., tmux + tmuxinator + sesh)
+- Closely related tools can share a package (e.g., tmux + sesh)
 - Adding a new tool? Create a new top-level package and add it to `install.sh`
 
 ### Machine-Specific Overrides

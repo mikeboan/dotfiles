@@ -48,10 +48,6 @@ brew "httpie"         # Better curl for APIs
 brew "tldr"           # Simplified man pages
 brew "glow"           # Markdown renderer
 brew "slides"         # Terminal presentations
-# mermaid-cli (mmdc): installed as an npm global under nvm, NOT via brew.
-#   The brew formula depends on node and would reinstall a system node that
-#   shadows nvm. Install with: npm i -g @mermaid-js/mermaid-cli
-#   (used inline in nvim via diagram.nvim)
 
 # Shell plugins (sourced directly in .zshrc — no framework)
 brew "zsh-autosuggestions"
