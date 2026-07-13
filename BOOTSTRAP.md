@@ -23,10 +23,17 @@ in order:
 
 ## Keyboard (Moonlander)
 
-- [ ] bootstrap cloned `zsa/qmk_firmware` on branch `firmware25` — verify the
-      personal keymap exists: `ls ~/qmk_firmware/keyboards/zsa/moonlander/keymaps/mike`
-      (if the branch only lived on the old machine, restore it from the fork/backup)
-- [ ] Build + flash: `qmk flash -kb zsa/moonlander -km mike`
+Keymap lives on branch `mike` of `~/qmk_firmware` (based on ZSA's `firmware25`):
+the `mike` keymap (force-added past QMK's keymap gitignore), the `zsa/defaults`
+module enable in `reva/keyboard.json`, and `modules/getreuer` as a submodule.
+
+> ⚠️ Branch `mike` is LOCAL-ONLY until the personal fork remote is set up and
+> pushed. Until then it exists only on the old machine.
+
+- [ ] Clone the fork (or `qmk setup zsa/qmk_firmware -b firmware25 -y` then
+      fetch branch `mike` from the fork)
+- [ ] `git checkout mike && git submodule update --init modules/getreuer`
+- [ ] Build + flash: `qmk flash -kb zsa/moonlander/reva -km mike`
 
 ## macOS settings
 

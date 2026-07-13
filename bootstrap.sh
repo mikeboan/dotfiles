@@ -32,6 +32,12 @@ fi
 echo "🔄 Updating Homebrew..."
 brew update
 
+# Trust third-party taps (newer Homebrew refuses untrusted-tap formulas)
+if brew trust --help &> /dev/null; then
+    brew trust qmk/qmk || true
+    brew trust osx-cross/arm || true
+fi
+
 # Install packages from Brewfile
 echo ""
 echo "📦 Installing packages from Brewfile..."
@@ -67,6 +73,8 @@ echo ""
 echo "⌨️  Setting up QMK firmware..."
 if command -v qmk &> /dev/null; then
     if [ ! -d "$HOME/qmk_firmware" ]; then
+        # TODO: once the personal fork remote exists, clone it instead and
+        # check out branch `mike` (keymap + getreuer submodule live there)
         qmk setup zsa/qmk_firmware -b firmware25 -y
         echo "✅ QMK firmware initialized"
     else
