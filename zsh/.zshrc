@@ -18,34 +18,30 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-# Source central theme configuration
-source "$HOME/.config/dotfiles/theme.sh"
-
-# Configure zsh-syntax-highlighting colors using theme variables
-# Must come after sourcing oh-my-zsh and theme.sh
+# zsh-syntax-highlighting colors — Tokyo Night Storm palette
 typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[command]="fg=$THEME_GREEN"                        # green - valid commands
-ZSH_HIGHLIGHT_STYLES[alias]="fg=$THEME_GREEN"                          # green - aliases
-ZSH_HIGHLIGHT_STYLES[builtin]="fg=$THEME_BLUE"                         # blue - builtins
-ZSH_HIGHLIGHT_STYLES[function]="fg=$THEME_BLUE"                        # blue - functions
-ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=$THEME_FG"    # fg
-ZSH_HIGHLIGHT_STYLES[path]="fg=$THEME_FG,underline"                    # fg with underline
-ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=$THEME_FG"                # fg
-ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]="fg=$THEME_FG"         # fg
-ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=$THEME_YELLOW"          # yellow - options
-ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=$THEME_YELLOW"          # yellow - options
-ZSH_HIGHLIGHT_STYLES[arg0]="fg=$THEME_GREEN"                           # green
-ZSH_HIGHLIGHT_STYLES[precommand]="fg=$THEME_GREEN,italic"              # green italic
-ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
-ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
-ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=$THEME_YELLOW"        # yellow - strings
-ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=$THEME_GREEN"  # green - vars in strings
-ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]="fg=$THEME_ORANGE"   # orange - escapes
-ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=$THEME_ORANGE"   # orange - escapes
-ZSH_HIGHLIGHT_STYLES[redirection]="fg=$THEME_FG"                       # fg
-ZSH_HIGHLIGHT_STYLES[comment]="fg=$THEME_COMMENT"                      # comment - dimmed
-ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=$THEME_RED"                    # red - errors
-ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=$THEME_MAGENTA"                # magenta - keywords
+ZSH_HIGHLIGHT_STYLES[command]="fg=#9ece6a"                        # green - valid commands
+ZSH_HIGHLIGHT_STYLES[alias]="fg=#9ece6a"                          # green - aliases
+ZSH_HIGHLIGHT_STYLES[builtin]="fg=#7aa2f7"                        # blue - builtins
+ZSH_HIGHLIGHT_STYLES[function]="fg=#7aa2f7"                       # blue - functions
+ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=#c0caf5" # fg
+ZSH_HIGHLIGHT_STYLES[path]="fg=#c0caf5,underline"                 # fg with underline
+ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=#c0caf5"             # fg
+ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]="fg=#c0caf5"      # fg
+ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=#e0af68"           # yellow - options
+ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=#e0af68"           # yellow - options
+ZSH_HIGHLIGHT_STYLES[arg0]="fg=#9ece6a"                           # green
+ZSH_HIGHLIGHT_STYLES[precommand]="fg=#9ece6a,italic"              # green italic
+ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=#e0af68"         # yellow - strings
+ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=#e0af68"         # yellow - strings
+ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=#e0af68"         # yellow - strings
+ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=#9ece6a"  # green - vars in strings
+ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]="fg=#ff9e64"    # orange - escapes
+ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=#ff9e64"    # orange - escapes
+ZSH_HIGHLIGHT_STYLES[redirection]="fg=#c0caf5"                    # fg
+ZSH_HIGHLIGHT_STYLES[comment]="fg=#565f89"                        # comment - dimmed
+ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=#f7768e"                  # red - errors
+ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=#bb9af7"                  # magenta - keywords
 
 export EDITOR='nvim'
 
@@ -70,7 +66,6 @@ eval "$(starship init zsh)"
 
 export PATH="$PATH:$HOME/bin"
 export PATH="$PATH:$HOME/.local/bin"
-export PATH="$PATH:$HOME/dotfiles/bin"
 
 export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
 

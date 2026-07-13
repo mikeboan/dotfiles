@@ -54,7 +54,7 @@ done
 
 # Create symlinks with Stow
 echo "🔗 Creating symlinks..."
-stow zsh tmux ideavim git kitty starship nvim gh just bin markdown pi yazi
+stow zsh tmux ideavim git kitty starship nvim gh just markdown pi yazi
 
 echo "✨ Dotfiles installation complete!"
 echo ""
