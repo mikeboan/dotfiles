@@ -27,11 +27,10 @@ Keymap lives on branch `mike` of `~/qmk_firmware` (based on ZSA's `firmware25`):
 the `mike` keymap (force-added past QMK's keymap gitignore), the `zsa/defaults`
 module enable in `reva/keyboard.json`, and `modules/getreuer` as a submodule.
 
-> ⚠️ Branch `mike` is LOCAL-ONLY until the personal fork remote is set up and
-> pushed. Until then it exists only on the old machine.
+Both branches are pushed to the fork: `github.com/mikeboan/qmk_firmware`.
+bootstrap.sh clones it via `qmk setup mikeboan/qmk_firmware -b mike`.
 
-- [ ] Clone the fork (or `qmk setup zsa/qmk_firmware -b firmware25 -y` then
-      fetch branch `mike` from the fork)
+- [ ] Verify the clone: `ls ~/qmk_firmware/keyboards/zsa/moonlander/keymaps/mike`
 - [ ] `git checkout mike && git submodule update --init modules/getreuer`
 - [ ] Build + flash: `qmk flash -kb zsa/moonlander/reva -km mike`
 

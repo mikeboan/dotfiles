@@ -75,7 +75,7 @@ if command -v qmk &> /dev/null; then
     if [ ! -d "$HOME/qmk_firmware" ]; then
         # TODO: once the personal fork remote exists, clone it instead and
         # check out branch `mike` (keymap + getreuer submodule live there)
-        qmk setup zsa/qmk_firmware -b firmware25 -y
+        qmk setup mikeboan/qmk_firmware -b mike -y
         echo "✅ QMK firmware initialized"
     else
         echo "✅ QMK firmware already set up"
