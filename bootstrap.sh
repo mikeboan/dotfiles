@@ -44,6 +44,10 @@ echo "📦 Installing packages from Brewfile..."
 brew bundle install --file="$(cd "$(dirname "$0")" && pwd)/Brewfile"
 echo "✅ Brewfile packages installed"
 
+# Some formulas leave brew's share dirs group-writable, which makes zsh
+# compinit refuse them as insecure fpath entries ("run compaudit" prompt)
+chmod -R go-w "$(brew --prefix)/share" 2>/dev/null || true
+
 # Clone fzf-git.sh if not present
 echo ""
 echo "📦 Installing fzf-git.sh..."
