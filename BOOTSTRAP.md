@@ -34,6 +34,17 @@ bootstrap.sh clones it via `qmk setup mikeboan/qmk_firmware -b mike`.
 - [ ] `git checkout mike && git submodule update --init modules/getreuer`
 - [ ] Build + flash: `qmk flash -kb zsa/moonlander/reva -km mike`
 
+## JetBrains IDEs (IdeaVim)
+
+`ideavim/.ideavimrc` (stowed to `~/.ideavimrc`) is a LazyVim-faithful config. It
+needs these IDE plugins — install per IDE via Settings → Plugins:
+
+- [ ] **IdeaVim**
+- [ ] **Which-Key** (keybinding hint popups)
+- [ ] **AceJump** (label jumps; required by EasyMotion)
+- [ ] **IdeaVim-EasyMotion** (flash-style `s` jump)
+- [ ] Reload after install: Tools → "Reload .ideavimrc" (or `:source ~/.ideavimrc`)
+
 ## macOS settings
 
 - [ ] Key repeat: System Settings → Keyboard → fastest repeat, shortest delay

@@ -11,6 +11,7 @@ tap "qmk/qmk"
 brew "stow"           # Dotfiles symlink manager
 brew "git"            # Version control
 brew "neovim"         # Text editor
+brew "tree-sitter-cli" # Treesitter grammar compiler (nvim-treesitter)
 brew "tmux"           # Terminal multiplexer
 brew "starship"       # Shell prompt
 brew "fzf"            # Fuzzy finder

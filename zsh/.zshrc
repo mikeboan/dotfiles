@@ -1,6 +1,18 @@
 # enable brew (first — everything below lives in $HOMEBREW_PREFIX)
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Auto-attach tmux when the terminal asks for it (kitty exports AUTO_TMUX=1).
+# Runs before anything else below — the exec'd shell inside tmux re-reads this file.
+# Guards: only interactive shells, never nested inside tmux / nvim / an agent's shell.
+if [[ -n $AUTO_TMUX && -z $TMUX && -z $NVIM && -z $CLAUDECODE ]] \
+  && [[ -o interactive ]] && command -v tmux &>/dev/null; then
+  if tmux has-session 2>/dev/null; then
+    exec tmux attach   # most recently used session
+  else
+    exec tmux new-session -s main
+  fi
+fi
+
 # Completions (brew-installed zsh-completions + system)
 fpath+="$HOMEBREW_PREFIX/share/zsh-completions"
 autoload -Uz compinit && compinit
@@ -86,6 +98,12 @@ alias gchain='`gcn`;git merge `gbase` --no-edit;`gpush`'
 # make `vi` and `vim` launch neovim
 alias vim="nvim"
 alias vi="nvim"
+
+# LazyVim trial (config in ~/.config/lazyvim, fully isolated from ~/.config/nvim).
+# To go back to the old config: delete these two lines. To try LazyVim on demand
+# only: keep just `lazyvim`, delete the `nvim` alias.
+alias lazyvim="NVIM_APPNAME=lazyvim nvim"
+alias nvim="NVIM_APPNAME=lazyvim nvim"
 # access vim when needed by bypassing the new vim alias
 alias oldvim="\vim"
 
