@@ -1,0 +1,12 @@
+# .gitconfig.local.example
+# Copy this to ~/.gitconfig.local and customize for work/machine-specific settings.
+# ~/.gitconfig.local is gitignored and won't be committed.
+
+# Example: override identity on a work machine
+# [user]
+#	email = you@work-email.com
+
+# Example: GitHub Enterprise credential helper
+# [credential "https://github.company.com"]
+#	helper =
+#	helper = !/opt/homebrew/bin/gh auth git-credential

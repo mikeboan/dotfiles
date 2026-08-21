@@ -15,7 +15,19 @@ fi
 
 # Completions (brew-installed zsh-completions + system)
 fpath+="$HOMEBREW_PREFIX/share/zsh-completions"
-autoload -Uz compinit && compinit
+autoload -Uz compinit
+
+# compaudit's fpath security scan makes a full compinit run cost ~500ms on
+# every shell. Skip it (compinit -C, trusts the cached dump) unless the dump
+# is missing or >24h old, in which case do the full audited run once.
+() {
+  setopt local_options extended_glob
+  if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+    compinit
+  else
+    compinit -C
+  fi
+}
 
 # Git aliases (gst, gco, gcm, ...) vendored from oh-my-zsh's git plugin
 source "$HOME/.config/zsh/omz-git.zsh"
@@ -52,8 +64,12 @@ export EDITOR='nvim'
 
 # -----
 
-# fnm — Node version manager; auto-switches on cd into dirs with .nvmrc
-eval "$(fnm env --use-on-cd --shell zsh)"
+# Personal-machine-only config (fnm, rbenv) — see
+# zsh/.config/zsh/profile-personal.zsh. Skipped on work machines where these
+# tools are not installed. Profile is set by install.sh into ~/.dotfiles-profile.
+if [ "$(cat ~/.dotfiles-profile 2>/dev/null)" = "personal" ]; then
+  source "$HOME/.config/zsh/profile-personal.zsh"
+fi
 
 # Keep PATH entries unique (first occurrence wins)
 typeset -U path PATH
@@ -66,34 +82,8 @@ export PATH="$PATH:$HOME/.local/bin"
 
 export PATH="/opt/homebrew/opt/postgresql@18/bin:$PATH"
 
-# rbenv setup
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init - --no-rehash zsh)"
-
 # system utilities installed via cargo (rust)
 export PATH="$PATH:$HOME/.cargo/bin"
-
-# --- git & github utils --- #
-
-# Base branch of current PR.
-alias gbase='gh pr view --json baseRefName -q ".baseRefName"'
-alias gcurrent='git rev-parse --symbolic-full-name --abbrev-ref HEAD'
-# Lists the first branch that uses current branch as base.
-alias gnext='gh pr list --base `gcurrent` --limit 1 --json headRefName -q ".[].headRefName"'
-# Lists ALL branches that use current branch as base.
-alias gnextAll='gh pr list --base `gcurrent` --json headRefName -q ".[].headRefName"'
-alias gcb='git checkout `gbase`'
-alias gcn='git checkout `gnext`'
-alias gcs='git checkout staging'
-alias gcm='git checkout main'
-alias gmb='git merge `gbase` --no-edit'
-alias gd='git branch -D'
-alias gdb='`gd` `gbase`'
-# Push/pull the current branch. Taken from:
-# https://stackoverflow.com/a/67507740
-alias gpush='git push origin "$(git symbolic-ref --short HEAD)"'
-alias gpull='git pull origin "$(git symbolic-ref --short HEAD)"'
-alias gchain='`gcn`;git merge `gbase` --no-edit;`gpush`'
 
 # make `vi` and `vim` launch neovim
 alias vim="nvim"

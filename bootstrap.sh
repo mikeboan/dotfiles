@@ -14,6 +14,12 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     exit 1
 fi
 
+# Resolve personal/work profile (prompts once, then remembers)
+source "$(dirname "$0")/scripts/dotfiles-profile.sh"
+profile="$(dotfiles_profile)"
+echo "🧭 Profile: $profile"
+echo ""
+
 # Install Homebrew if not present
 if ! command -v brew &> /dev/null; then
     echo "📦 Installing Homebrew..."
@@ -32,8 +38,9 @@ fi
 echo "🔄 Updating Homebrew..."
 brew update
 
-# Trust third-party taps (newer Homebrew refuses untrusted-tap formulas)
-if brew trust --help &> /dev/null; then
+# Trust third-party taps (newer Homebrew refuses untrusted-tap formulas).
+# Only the personal profile installs from them — see Brewfile.personal.
+if [ "$profile" = "personal" ] && brew trust --help &> /dev/null; then
     brew trust qmk/qmk || true
     brew trust osx-cross/arm || true
 fi
@@ -41,7 +48,12 @@ fi
 # Install packages from Brewfile
 echo ""
 echo "📦 Installing packages from Brewfile..."
-brew bundle install --file="$(cd "$(dirname "$0")" && pwd)/Brewfile"
+brewfile_dir="$(cd "$(dirname "$0")" && pwd)"
+brew bundle install --file="$brewfile_dir/Brewfile"
+if [ "$profile" = "personal" ]; then
+    echo "📦 Installing personal-only packages from Brewfile.personal..."
+    brew bundle install --file="$brewfile_dir/Brewfile.personal"
+fi
 echo "✅ Brewfile packages installed"
 
 # Some formulas leave brew's share dirs group-writable, which makes zsh
@@ -61,31 +73,35 @@ fi
 echo "🔧 Setting up fzf..."
 $(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc
 
-# Pi coding agent — uses the official installer which bundles its own Node binary,
-# so it stays working when you switch nvm versions.
-echo ""
-echo "🤖 Installing Pi coding agent..."
-if ! command -v pi &> /dev/null; then
-    curl -fsSL https://pi.dev/install.sh | sh
-    echo "✅ Pi installed"
-else
-    echo "✅ Pi already installed"
-fi
-
-# QMK firmware setup (ZSA Moonlander)
-echo ""
-echo "⌨️  Setting up QMK firmware..."
-if command -v qmk &> /dev/null; then
-    if [ ! -d "$HOME/qmk_firmware" ]; then
-        # TODO: once the personal fork remote exists, clone it instead and
-        # check out branch `mike` (keymap + getreuer submodule live there)
-        qmk setup mikeboan/qmk_firmware -b mike -y
-        echo "✅ QMK firmware initialized"
+# Personal-machine-only setup: neither Pi nor the QMK toolchain is permitted or
+# relevant on a corporate machine.
+if [ "$profile" = "personal" ]; then
+    # Pi coding agent — uses the official installer which bundles its own Node
+    # binary, so it stays working when you switch nvm versions.
+    echo ""
+    echo "🤖 Installing Pi coding agent..."
+    if ! command -v pi &> /dev/null; then
+        curl -fsSL https://pi.dev/install.sh | sh
+        echo "✅ Pi installed"
     else
-        echo "✅ QMK firmware already set up"
+        echo "✅ Pi already installed"
     fi
-else
-    echo "⚠️  qmk not found (skipping firmware setup)"
+
+    # QMK firmware setup (ZSA Moonlander)
+    echo ""
+    echo "⌨️  Setting up QMK firmware..."
+    if command -v qmk &> /dev/null; then
+        if [ ! -d "$HOME/qmk_firmware" ]; then
+            # TODO: once the personal fork remote exists, clone it instead and
+            # check out branch `mike` (keymap + getreuer submodule live there)
+            qmk setup mikeboan/qmk_firmware -b mike -y
+            echo "✅ QMK firmware initialized"
+        else
+            echo "✅ QMK firmware already set up"
+        fi
+    else
+        echo "⚠️  qmk not found (skipping firmware setup)"
+    fi
 fi
 
 echo ""
