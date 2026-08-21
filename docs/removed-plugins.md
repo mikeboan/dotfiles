@@ -29,3 +29,42 @@ LSP servers dropped from Mason: angularls (no Angular work), yamlls, marksman.
 
 Non-nvim removals in the same overhaul (see commit history): tmuxinator,
 aerospace, iterm2 cask, theme switcher machinery, oh-my-zsh, nvm.
+
+## 2026-08 — LazyVim migration
+
+The hand-rolled config was deleted wholesale and replaced with LazyVim.
+Recoverable from commit `0e4c98a`:
+
+```
+git show 0e4c98a:nvim/.config/nvim/lua/plugins/<file>
+```
+
+Dropped because LazyVim (core or an extra) already does it:
+
+| Plugin | Was in | Replaced by |
+|---|---|---|
+| conform.nvim (hand-configured) | formatting.lua | LazyVim core conform + `formatting.prettier` extra |
+| mason.nvim, mason-lspconfig, nvim-lspconfig wiring | lsp.lua | LazyVim core LSP + `lang.*` extras |
+| vim-fugitive, vim-rhubarb | git.lua | lazygit (`<leader>gg`), snacks.gitbrowse (`<leader>gY`), gitsigns |
+| fzf-lua | picker.lua | snacks.picker (`<leader>f` find / `<leader>s` search) |
+| oil.nvim | navigation.lua | mini.files (`<leader>e`), `use_as_default_explorer` |
+| lualine.nvim (hand-themed) | statusline.lua | LazyVim's lualine config |
+| which-key.nvim (hand-configured) | keybindings.lua | LazyVim's which-key config |
+| nvim-treesitter(-textobjects) hand-wiring | treesitter.lua | LazyVim core treesitter + mini.ai textobjects |
+| mini.pairs, mini.surround, mini.icons, todo-comments, flash, render-markdown, gitsigns, blink.cmp, treesitter-context, vim-illuminate, harpoon | various | Same plugins, LazyVim-managed |
+
+Dropped outright:
+
+| Plugin | Was in | Why removed |
+|---|---|---|
+| nvim-ufo, promise-async | folding.lua | nvim 0.11 native LSP/treesitter `foldexpr`, which LazyVim wires up |
+| multicursor.nvim | multicursor.lua | LSP rename + `inc-rename` extra + `:s` cover it |
+| fidget.nvim | feedback.lua | snacks.notifier reports LSP progress |
+| onedark.nvim | colorscheme.lua | IntelliJ now runs IdeaVim, not a nested nvim |
+
+Kept as custom specs on top of LazyVim (`lua/plugins/`): diffview (git's
+mergetool, see `~/.gitconfig`), undotree, flatten.nvim, vim-sleuth,
+vim-tmux-navigator.
+
+Disabled in LazyVim: noice.nvim (native cmdline/messages), snacks.explorer
+(mini.files instead).

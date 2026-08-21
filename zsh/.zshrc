@@ -99,12 +99,7 @@ alias gchain='`gcn`;git merge `gbase` --no-edit;`gpush`'
 alias vim="nvim"
 alias vi="nvim"
 
-# LazyVim trial (config in ~/.config/lazyvim, fully isolated from ~/.config/nvim).
-# To go back to the old config: delete these two lines. To try LazyVim on demand
-# only: keep just `lazyvim`, delete the `nvim` alias.
-alias lazyvim="NVIM_APPNAME=lazyvim nvim"
-alias nvim="NVIM_APPNAME=lazyvim nvim"
-# access vim when needed by bypassing the new vim alias
+# access real vi/vim when needed by bypassing the aliases above
 alias oldvim="\vim"
 
 # Set up fzf key bindings and fuzzy completion

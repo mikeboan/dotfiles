@@ -1,0 +1,4 @@
+-- Loaded on VeryLazy, after LazyVim's own keymaps:
+-- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
+--
+-- Plugin keymaps live with their plugin spec in lua/plugins/.

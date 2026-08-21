@@ -10,7 +10,7 @@ Each top-level directory is a **tool-named stow package**. A package owns *all* 
 
 ```
 dotfiles/
-  nvim/           → ~/.config/nvim/                       # Neovim
+  nvim/           → ~/.config/nvim/                       # Neovim (LazyVim)
   tmux/           → ~/.tmux.conf, ~/.config/sesh/          # Tmux + sesh sessions
   zsh/            → ~/.zshrc, ~/.config/zsh/               # Shell (frameworkless)
   starship/       → ~/.config/starship.toml               # Prompt
@@ -50,7 +50,11 @@ dotfiles/
 
 ### Config File Conventions
 
-- **Lua configs** (neovim): one file per concern, imported by a central init
+- **Lua configs** (neovim): stock LazyVim. `lazyvim.json` is the extras list;
+  `lua/config/*.lua` holds only deltas from LazyVim defaults; `lua/plugins/*.lua`
+  holds one file per override or custom plugin. Check LazyVim's own source at
+  `~/.local/share/nvim/lazy/LazyVim/lua/lazyvim/` before adding anything — it
+  probably already ships it as core or an extra
 - **Shell configs** (zsh): single `.zshrc`, sections clearly commented
 - **Declarative configs** (tmux, git): single file per tool
 
