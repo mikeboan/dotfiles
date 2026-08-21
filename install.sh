@@ -13,6 +13,11 @@ if [ ! -f "install.sh" ]; then
     exit 1
 fi
 
+# Resolve personal/work profile (prompts once, then remembers)
+source "$(dirname "$0")/scripts/dotfiles-profile.sh"
+profile="$(dotfiles_profile)"
+echo "🧭 Profile: $profile"
+
 # Install Stow if not present
 if ! command -v stow &> /dev/null; then
     echo "📦 Installing GNU Stow..."
@@ -54,7 +59,11 @@ done
 
 # Create symlinks with Stow
 echo "🔗 Creating symlinks..."
-stow zsh tmux ideavim git kitty starship nvim gh just markdown pi yazi
+packages="zsh tmux ideavim git kitty starship nvim gh just markdown yazi"
+if [ "$profile" = "personal" ]; then
+    packages="$packages pi"
+fi
+stow $packages
 
 echo "✨ Dotfiles installation complete!"
 echo ""

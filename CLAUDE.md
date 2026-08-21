@@ -29,7 +29,9 @@ dotfiles/
 - `install.sh` — stow all packages, backs up existing files
 - `bootstrap.sh` — fresh macOS setup: Homebrew, `brew bundle` from Brewfile, QMK, Pi
 - `BOOTSTRAP.md` — manual checklist for the unscriptable rest of a new machine
-- `Brewfile` — single source of truth for all Homebrew packages and casks
+- `Brewfile` — Homebrew packages shared by every machine
+- `Brewfile.personal` — personal-machine-only Homebrew packages
+- `scripts/dotfiles-profile.sh` — resolves the personal/work profile for this machine
 - `docs/removed-plugins.md` — ledger of everything killed in the 2026-07 minimalism overhaul
 
 ## Conventions
@@ -46,7 +48,19 @@ dotfiles/
 
 - Use `.local` suffix files for machine/work-specific config (gitignored)
 - Example: `.zshrc` sources `.zshrc.local` if it exists
-- `.zshrc.local.example` shows the expected format
+- `.zshrc.local.example` and `git/.gitconfig.local.example` show the expected format
+
+### Personal vs. Work Profile
+
+Some tools/packages aren't installed or permitted on corporate machines (e.g.
+`pi`, QMK firmware, certain language version managers). This is a first-class
+split, not a `.local` override:
+
+- `~/.dotfiles-profile` holds `personal` or `work`, set by a one-time prompt in
+  `install.sh`/`bootstrap.sh` (see `scripts/dotfiles-profile.sh`); override with
+  `DOTFILES_PROFILE=personal ./bootstrap.sh`
+- `Brewfile` is shared; `Brewfile.personal` holds personal-only packages,
+  installed only when the profile is `personal`
 
 ### Config File Conventions
 

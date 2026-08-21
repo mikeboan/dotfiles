@@ -1,8 +1,12 @@
 # New Machine Checklist
 
-`./bootstrap.sh` handles everything scriptable (Homebrew, Brewfile, fzf, Pi,
-QMK clone). `./install.sh` stows the configs. This is the unscriptable rest,
-in order:
+`./bootstrap.sh` and `./install.sh` both prompt once for a profile (`personal`
+or `work`), saved to `~/.dotfiles-profile` so later re-runs don't re-ask
+(override with `DOTFILES_PROFILE=personal ./bootstrap.sh`). The profile gates
+anything not allowed/relevant on a corporate machine: the `pi` stow package,
+Pi's installer, QMK setup, and `Brewfile.personal` (language version managers,
+QMK toolchain, personal GUI apps). `./install.sh` stows the configs. This is
+the unscriptable rest, in order:
 
 ## Auth & identity
 
@@ -14,9 +18,10 @@ in order:
 ## Machine-local config
 
 - [ ] `cp ~/dotfiles/zsh/.zshrc.local.example ~/.zshrc.local` and customize
-- [ ] `~/.gitconfig.local` for any machine-specific git identity/tokens
+- [ ] `cp ~/dotfiles/git/.gitconfig.local.example ~/.gitconfig.local` for any
+      machine-specific git identity/credential helpers/tokens
 
-## Language runtimes
+## Language runtimes (personal machines only — see Brewfile.personal)
 
 - [ ] `fnm install --lts && fnm default lts-latest` (or per-project via .nvmrc)
 - [ ] Python per-project via `uv` (no global install needed)
