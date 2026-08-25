@@ -22,6 +22,7 @@ dotfiles/
   just/           → ~/.justfile                           # Command runner
   markdown/       → ~/.markdownlintrc                     # Markdown linting
   pi/             → ~/.pi/agent/                          # Pi coding agent
+  claude/         → ~/.claude/                            # Claude Code global config
 ```
 
 ### Other Files (Not Stow Packages)
@@ -33,6 +34,7 @@ dotfiles/
 - `Brewfile.personal` — personal-machine-only Homebrew packages
 - `scripts/dotfiles-profile.sh` — resolves the personal/work profile for this machine
 - `docs/removed-plugins.md` — ledger of everything killed in the 2026-07 minimalism overhaul
+- `claude/README.md` — what the `claude` package ships and why `settings.json` isn't stowed
 
 ## Conventions
 
@@ -71,6 +73,9 @@ split, not a `.local` override:
   probably already ships it as core or an extra
 - **Shell configs** (zsh): single `.zshrc`, sections clearly commented
 - **Declarative configs** (tmux, git): single file per tool
+- **Agent configs** (claude): only hand-authored files are tracked — instructions,
+  rules, statusline. Anything Claude Code rewrites itself (`settings.json`,
+  caches, session state) stays untracked; ship a `.example.json` template instead
 
 ### Idempotency
 

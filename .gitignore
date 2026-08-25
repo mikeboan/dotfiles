@@ -27,7 +27,7 @@ backup/
 # Neovim test/scratch files
 nvim/.config/nvim/test-files/
 
-# Claude Code
-.claude/
+# Claude Code (repo-local agent state only — the `claude/` stow package IS tracked)
+/.claude/
 .claude.json
 .claude.json.backup

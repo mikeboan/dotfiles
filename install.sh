@@ -40,7 +40,8 @@ echo "💾 Backing up existing dotfiles (if any)..."
 backup_dir="$HOME/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$backup_dir"
 
-# List of files that Stow will manage
+# Paths (relative to $HOME) that Stow will manage and may already exist as
+# real files/dirs. Nested paths keep their structure inside the backup dir.
 files_to_backup=(
     ".zshrc"
     ".tmux.conf"
@@ -48,18 +49,22 @@ files_to_backup=(
     ".gitconfig"
     ".justfile"
     ".markdownlintrc"
+    ".claude/CLAUDE.md"
+    ".claude/code-philosophy.md"
+    ".claude/statusline-command.sh"
 )
 
 for file in "${files_to_backup[@]}"; do
     if [ -e "$HOME/$file" ] && [ ! -L "$HOME/$file" ]; then
         echo "  Backing up $file"
-        mv "$HOME/$file" "$backup_dir/"
+        mkdir -p "$backup_dir/$(dirname "$file")"
+        mv "$HOME/$file" "$backup_dir/$file"
     fi
 done
 
 # Create symlinks with Stow
 echo "🔗 Creating symlinks..."
-packages="zsh tmux ideavim git kitty starship nvim gh just markdown yazi"
+packages="zsh tmux ideavim git kitty starship nvim gh just markdown yazi claude"
 if [ "$profile" = "personal" ]; then
     packages="$packages pi"
 fi
@@ -73,5 +78,6 @@ echo "🔧 Next steps:"
 echo "   - Restart your shell or run: source ~/.zshrc"
 echo "   - Create ~/.zshrc.local for work/machine-specific settings (see zsh/.zshrc.local.example)"
 echo "   - Create ~/.gitconfig.local for git secrets/tokens if needed"
+echo "   - Claude Code: cp ~/.claude/settings.example.json ~/.claude/settings.json (see claude/README.md)"
 echo ""
 echo "🎉 Happy coding!"
