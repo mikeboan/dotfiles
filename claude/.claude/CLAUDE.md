@@ -16,21 +16,17 @@ Only read these when I explicitly ask you to check my notes or reference them.
 - Make the plan extremely concise. Sacrifice grammar for the sake of concision.
 - At the end of each plan, give me a list of unresolved questions to answer, if any.
 
-## Design Thinking
-Default to FP concepts when designing abstractions: monads, functors, algebraic data types, composition over inheritance. Name them — don't shy away from "monad" or "functor" when that's what something is. Prefer data-oriented designs (declarative graphs, state machines, context-carrying cursors) over OOP hierarchies. When a problem involves state threading, conditional branching, or sequencing effects, reach for the FP pattern first (e.g., Result/Either for errors, Flow monad for navigation, Option for nullability) and only fall back to imperative patterns if the FP version adds complexity without payoff. Tweak the specific patterns to taste — propose monadic APIs, algebraic types, composition pipelines, etc. as the default framing rather than treating them as exotic. Additionally, prefer Dependency Injection for testability and reusability. The exact flavor of DI may depend on the context and surrounding technologies.
+## Code Philosophy
 
+Read `~/.claude/code-philosophy.md` when designing abstractions, modules, or tests, or when reviewing a design. The principles interlock; overlap between them is deliberate reinforcement.
 
-## Code Philosophy (see `./code-philosophy.md` for full rationale)
-
-These principles guide every design decision:
-
-1. **Pragmatic FP** — Pure functions by default. Immutability. Composition over inheritance. Side effects at the edges.
+1. **Pragmatic FP, pushed further** — Pure core by default, then climb: make illegal states unrepresentable, parse don't validate, errors as values, effects as data, composition. Name the patterns (functor, monad). Propose the FP version first; when imperative wins, say why in one line.
 2. **Single Level of Abstraction** — Each function operates at one level. Don't mix "what" and "how."
-3. **Pragmatic DDD** — Ubiquitous language, bounded contexts, value objects. Skip the ceremony.
-4. **Testability by construction** — If it's hard to test, the design is wrong. No hidden dependencies.
-5. **Simple Made Easy** — Decomplect. Prefer data over objects. Be suspicious of convenience.
+3. **Pragmatic DDD** — Ubiquitous language, bounded contexts, value objects, anti-corruption layers. Skip the ceremony.
+4. **Testability by construction** — Test pain is design feedback; patching silences it. Dependency rejection → impureim sandwich → injected functions → owned ports with fakes. Mock only what you own.
+5. **Simple Made Easy** — Decomplect. Data and state machines over objects and hierarchies. Be suspicious of convenience.
 6. **Boring code** — Optimize for the reader. Obvious beats elegant. Never clever.
-7. **Connascence** — Prefer weaker coupling. Meaning → name. Position → named params. Stronger coupling stays local.
+7. **Connascence** — Prefer weaker coupling. Meaning → name or type. Position → named params. Timing → type. Stronger coupling stays local.
 8. **Feedback-first design** — Every decision judged by "how fast can I get feedback?" Push validation left.
 9. **Engineering discipline** — Small reversible steps. Modularity. Build the simplest thing, get feedback, evolve.
 
