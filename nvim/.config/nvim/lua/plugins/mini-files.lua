@@ -1,6 +1,6 @@
--- Promote mini.files to THE explorer. The LazyVim extra leaves snacks.explorer
--- in charge and parks mini.files on <leader>fm; snacks.explorer is disabled in
--- disabled.lua, so take over <leader>e / <leader>E too.
+-- Promote mini.files to the primary explorer. The LazyVim extra leaves
+-- snacks.explorer on <leader>e and parks mini.files on <leader>fm; take over
+-- <leader>e / <leader>E. snacks.explorer lives on `-` (see explorer.lua).
 return {
   "nvim-mini/mini.files",
   keys = {
@@ -26,6 +26,17 @@ return {
       desc = "Explorer (Root Dir)",
     },
   },
+  init = function()
+    -- `-` = parent dir, as in oil and the snacks tree (see explorer.lua)
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "MiniFilesBufferCreate",
+      callback = function(args)
+        vim.keymap.set("n", "-", function()
+          require("mini.files").go_out()
+        end, { buffer = args.data.buf_id, desc = "Go out of directory" })
+      end,
+    })
+  end,
   opts = {
     mappings = {
       go_in = "<Right>",
