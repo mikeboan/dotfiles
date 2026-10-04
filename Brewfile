@@ -44,6 +44,7 @@ brew "yq"             # YAML processor
 brew "httpie"         # Better curl for APIs
 brew "tldr"           # Simplified man pages
 brew "glow"           # Markdown renderer
+brew "mermaid-cli"    # mmdc: renders mermaid for snacks.image in nvim
 brew "slides"         # Terminal presentations
 
 # Shell plugins (sourced directly in .zshrc — no framework)

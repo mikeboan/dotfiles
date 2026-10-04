@@ -149,6 +149,12 @@ diskhog() { sudo ncdu -x "${1:-/}"; }
 # Git delta configuration (better diffs)
 export GIT_PAGER='delta'
 
+# mmdc (mermaid-cli, used by nvim snacks.image) drives headless Chrome via
+# puppeteer; point it at system Chrome instead of a puppeteer-managed download
+_chrome="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+[[ -x "$_chrome" ]] && export PUPPETEER_EXECUTABLE_PATH="$_chrome"
+unset _chrome
+
 # Syntax highlighting (its README requires sourcing last)
 source "$HOMEBREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
