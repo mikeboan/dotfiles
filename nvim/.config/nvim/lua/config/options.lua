@@ -15,6 +15,16 @@ opt.breakindent = true
 opt.breakindentopt = "shift:2"
 opt.showbreak = "↪ "
 
+-- Diff mode. LazyVim fills missing lines with "╱", which is visual noise;
+-- blank filler lets the background tint carry the meaning.
+opt.fillchars:append({ diff = " " })
+-- histogram: better alignment for code than myers (the default).
+-- linematch: pair up similar lines inside a hunk so changes show as changes,
+-- not delete+add (60 = max lines per hunk to run it on; default 40).
+opt.diffopt:append({ "algorithm:histogram" })
+opt.diffopt:remove("linematch:40")
+opt.diffopt:append({ "linematch:60" })
+
 -- Whitespace visualization
 opt.list = true
 opt.listchars = { tab = "⇥ ", trail = "·", nbsp = "␣" }

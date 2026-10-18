@@ -11,6 +11,9 @@ return {
       { "<leader>gV", "<cmd>DiffviewFileHistory %<cr>", desc = "Diffview File History (file)" },
     },
     opts = {
+      -- Left side shows removed lines in red (not DiffAdd green), and filler
+      -- lines get no background at all.
+      enhanced_diff_hl = true,
       view = {
         merge_tool = {
           layout = "diff3_mixed", -- LOCAL | REMOTE on top, MERGED below

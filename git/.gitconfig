@@ -51,6 +51,7 @@
 	cmd = nvim -n -c "DiffviewOpen" "$MERGE"
 
 [diff]
+	algorithm = histogram
 	colorMoved = default
 
 # Include local config (for work-specific settings, tokens, etc.)
